@@ -1,0 +1,367 @@
+Q860950 | QUERY ERROR | ('Connection aborted.', ConnectionAbortedError(103, 'Software caused connection abort'))
+Q642023 | QUERY ERROR | HTTPSConnectionPool(host='www.wikidata.org', port=443): Max retries exceeded with url: /w/api.php?action=wbgetentities&ids=Q642023&props=claims&format=json (Caused by NameResolutionError("HTTPSConnection(host='www.wikidata.org', port=443): Failed to resolve 'www.wikidata.org' ([Errno 7] No address associated with hostname)"))
+Q476458 | QUERY ERROR | HTTPSConnectionPool(host='www.wikidata.org', port=443): Max retries exceeded with url: /w/api.php?action=wbgetentities&ids=Q476458&props=claims&format=json (Caused by NameResolutionError("HTTPSConnection(host='www.wikidata.org', port=443): Failed to resolve 'www.wikidata.org' ([Errno 7] No address associated with hostname)"))
+Q176923 | QUERY ERROR | HTTPSConnectionPool(host='www.wikidata.org', port=443): Max retries exceeded with url: /w/api.php?action=wbgetentities&ids=Q176923&props=claims&format=json (Caused by NameResolutionError("HTTPSConnection(host='www.wikidata.org', port=443): Failed to resolve 'www.wikidata.org' ([Errno 7] No address associated with hostname)"))
+Q496966 | QUERY ERROR | HTTPSConnectionPool(host='www.wikidata.org', port=443): Max retries exceeded with url: /w/api.php?action=wbgetentities&ids=Q496966&props=claims&format=json (Caused by NameResolutionError("HTTPSConnection(host='www.wikidata.org', port=443): Failed to resolve 'www.wikidata.org' ([Errno 7] No address associated with hostname)"))
+Q538859 | QUERY ERROR | HTTPSConnectionPool(host='www.wikidata.org', port=443): Max retries exceeded with url: /w/api.php?action=wbgetentities&ids=Q538859&props=claims&format=json (Caused by NameResolutionError("HTTPSConnection(host='www.wikidata.org', port=443): Failed to resolve 'www.wikidata.org' ([Errno 7] No address associated with hostname)"))
+Q860916 | QUERY ERROR | HTTPSConnectionPool(host='www.wikidata.org', port=443): Max retries exceeded with url: /w/api.php?action=wbgetentities&ids=Q860916&props=claims&format=json (Caused by NameResolutionError("HTTPSConnection(host='www.wikidata.org', port=443): Failed to resolve 'www.wikidata.org' ([Errno 7] No address associated with hostname)"))
+Q604761 | QUERY ERROR | HTTPSConnectionPool(host='www.wikidata.org', port=443): Max retries exceeded with url: /w/api.php?action=wbgetentities&ids=Q604761&props=claims&format=json (Caused by NameResolutionError("HTTPSConnection(host='www.wikidata.org', port=443): Failed to resolve 'www.wikidata.org' ([Errno 7] No address associated with hostname)"))
+Q23908 | QUERY ERROR | HTTPSConnectionPool(host='www.wikidata.org', port=443): Max retries exceeded with url: /w/api.php?action=wbgetentities&ids=Q23908&props=claims&format=json (Caused by NameResolutionError("HTTPSConnection(host='www.wikidata.org', port=443): Failed to resolve 'www.wikidata.org' ([Errno 7] No address associated with hostname)"))
+Q645120 | QUERY ERROR | HTTPSConnectionPool(host='www.wikidata.org', port=443): Max retries exceeded with url: /w/api.php?action=wbgetentities&ids=Q645120&props=claims&format=json (Caused by NameResolutionError("HTTPSConnection(host='www.wikidata.org', port=443): Failed to resolve 'www.wikidata.org' ([Errno 7] No address associated with hostname)"))
+Q860919 | QUERY ERROR | HTTPSConnectionPool(host='www.wikidata.org', port=443): Max retries exceeded with url: /w/api.php?action=wbgetentities&ids=Q860919&props=claims&format=json (Caused by NameResolutionError("HTTPSConnection(host='www.wikidata.org', port=443): Failed to resolve 'www.wikidata.org' ([Errno 7] No address associated with hostname)"))
+Q860936 | QUERY ERROR | HTTPSConnectionPool(host='www.wikidata.org', port=443): Max retries exceeded with url: /w/api.php?action=wbgetentities&ids=Q860936&props=claims&format=json (Caused by NameResolutionError("HTTPSConnection(host='www.wikidata.org', port=443): Failed to resolve 'www.wikidata.org' ([Errno 7] No address associated with hostname)"))
+Q31607 | QUERY ERROR | HTTPSConnectionPool(host='www.wikidata.org', port=443): Max retries exceeded with url: /w/api.php?action=wbgetentities&ids=Q31607&props=claims&format=json (Caused by NameResolutionError("HTTPSConnection(host='www.wikidata.org', port=443): Failed to resolve 'www.wikidata.org' ([Errno 7] No address associated with hostname)"))
+Q372628 | QUERY ERROR | HTTPSConnectionPool(host='www.wikidata.org', port=443): Max retries exceeded with url: /w/api.php?action=wbgetentities&ids=Q372628&props=claims&format=json (Caused by NameResolutionError("HTTPSConnection(host='www.wikidata.org', port=443): Failed to resolve 'www.wikidata.org' ([Errno 7] No address associated with hostname)"))
+Q766011 | QUERY ERROR | HTTPSConnectionPool(host='www.wikidata.org', port=443): Max retries exceeded with url: /w/api.php?action=wbgetentities&ids=Q766011&props=claims&format=json (Caused by NameResolutionError("HTTPSConnection(host='www.wikidata.org', port=443): Failed to resolve 'www.wikidata.org' ([Errno 7] No address associated with hostname)"))
+Q38197 | QUERY ERROR | HTTPSConnectionPool(host='www.wikidata.org', port=443): Max retries exceeded with url: /w/api.php?action=wbgetentities&ids=Q38197&props=claims&format=json (Caused by NameResolutionError("HTTPSConnection(host='www.wikidata.org', port=443): Failed to resolve 'www.wikidata.org' ([Errno 7] No address associated with hostname)"))
+Q531329 | QUERY ERROR | HTTPSConnectionPool(host='www.wikidata.org', port=443): Max retries exceeded with url: /w/api.php?action=wbgetentities&ids=Q531329&props=claims&format=json (Caused by NameResolutionError("HTTPSConnection(host='www.wikidata.org', port=443): Failed to resolve 'www.wikidata.org' ([Errno 7] No address associated with hostname)"))
+Q472799 | QUERY ERROR | HTTPSConnectionPool(host='www.wikidata.org', port=443): Max retries exceeded with url: /w/api.php?action=wbgetentities&ids=Q472799&props=claims&format=json (Caused by NameResolutionError("HTTPSConnection(host='www.wikidata.org', port=443): Failed to resolve 'www.wikidata.org' ([Errno 7] No address associated with hostname)"))
+Q467359 | QUERY ERROR | HTTPSConnectionPool(host='www.wikidata.org', port=443): Max retries exceeded with url: /w/api.php?action=wbgetentities&ids=Q467359&props=claims&format=json (Caused by NameResolutionError("HTTPSConnection(host='www.wikidata.org', port=443): Failed to resolve 'www.wikidata.org' ([Errno 7] No address associated with hostname)"))
+Q641666 | QUERY ERROR | HTTPSConnectionPool(host='www.wikidata.org', port=443): Max retries exceeded with url: /w/api.php?action=wbgetentities&ids=Q641666&props=claims&format=json (Caused by NameResolutionError("HTTPSConnection(host='www.wikidata.org', port=443): Failed to resolve 'www.wikidata.org' ([Errno 7] No address associated with hostname)"))
+Q614047 | QUERY ERROR | HTTPSConnectionPool(host='www.wikidata.org', port=443): Max retries exceeded with url: /w/api.php?action=wbgetentities&ids=Q614047&props=claims&format=json (Caused by NameResolutionError("HTTPSConnection(host='www.wikidata.org', port=443): Failed to resolve 'www.wikidata.org' ([Errno 7] No address associated with hostname)"))
+Q512755 | QUERY ERROR | HTTPSConnectionPool(host='www.wikidata.org', port=443): Max retries exceeded with url: /w/api.php?action=wbgetentities&ids=Q512755&props=claims&format=json (Caused by NameResolutionError("HTTPSConnection(host='www.wikidata.org', port=443): Failed to resolve 'www.wikidata.org' ([Errno 7] No address associated with hostname)"))
+Q45130 | QUERY ERROR | HTTPSConnectionPool(host='www.wikidata.org', port=443): Max retries exceeded with url: /w/api.php?action=wbgetentities&ids=Q45130&props=claims&format=json (Caused by NameResolutionError("HTTPSConnection(host='www.wikidata.org', port=443): Failed to resolve 'www.wikidata.org' ([Errno 7] No address associated with hostname)"))
+Q735061 | QUERY ERROR | HTTPSConnectionPool(host='www.wikidata.org', port=443): Max retries exceeded with url: /w/api.php?action=wbgetentities&ids=Q735061&props=claims&format=json (Caused by NameResolutionError("HTTPSConnection(host='www.wikidata.org', port=443): Failed to resolve 'www.wikidata.org' ([Errno 7] No address associated with hostname)"))
+Q588695 | QUERY ERROR | HTTPSConnectionPool(host='www.wikidata.org', port=443): Max retries exceeded with url: /w/api.php?action=wbgetentities&ids=Q588695&props=claims&format=json (Caused by NameResolutionError("HTTPSConnection(host='www.wikidata.org', port=443): Failed to resolve 'www.wikidata.org' ([Errno 7] No address associated with hostname)"))
+Q766782 | QUERY ERROR | HTTPSConnectionPool(host='www.wikidata.org', port=443): Max retries exceeded with url: /w/api.php?action=wbgetentities&ids=Q766782&props=claims&format=json (Caused by NameResolutionError("HTTPSConnection(host='www.wikidata.org', port=443): Failed to resolve 'www.wikidata.org' ([Errno 7] No address associated with hostname)"))
+Q185372 | QUERY ERROR | HTTPSConnectionPool(host='www.wikidata.org', port=443): Max retries exceeded with url: /w/api.php?action=wbgetentities&ids=Q185372&props=claims&format=json (Caused by NameResolutionError("HTTPSConnection(host='www.wikidata.org', port=443): Failed to resolve 'www.wikidata.org' ([Errno 7] No address associated with hostname)"))
+Q764831 | QUERY ERROR | HTTPSConnectionPool(host='www.wikidata.org', port=443): Max retries exceeded with url: /w/api.php?action=wbgetentities&ids=Q764831&props=claims&format=json (Caused by NameResolutionError("HTTPSConnection(host='www.wikidata.org', port=443): Failed to resolve 'www.wikidata.org' ([Errno 7] No address associated with hostname)"))
+Q544315 | QUERY ERROR | HTTPSConnectionPool(host='www.wikidata.org', port=443): Max retries exceeded with url: /w/api.php?action=wbgetentities&ids=Q544315&props=claims&format=json (Caused by NameResolutionError("HTTPSConnection(host='www.wikidata.org', port=443): Failed to resolve 'www.wikidata.org' ([Errno 7] No address associated with hostname)"))
+Q166937 | QUERY ERROR | HTTPSConnectionPool(host='www.wikidata.org', port=443): Max retries exceeded with url: /w/api.php?action=wbgetentities&ids=Q166937&props=claims&format=json (Caused by NameResolutionError("HTTPSConnection(host='www.wikidata.org', port=443): Failed to resolve 'www.wikidata.org' ([Errno 7] No address associated with hostname)"))
+Q839359 | QUERY ERROR | HTTPSConnectionPool(host='www.wikidata.org', port=443): Max retries exceeded with url: /w/api.php?action=wbgetentities&ids=Q839359&props=claims&format=json (Caused by NameResolutionError("HTTPSConnection(host='www.wikidata.org', port=443): Failed to resolve 'www.wikidata.org' ([Errno 7] No address associated with hostname)"))
+Q523974 | QUERY ERROR | HTTPSConnectionPool(host='www.wikidata.org', port=443): Max retries exceeded with url: /w/api.php?action=wbgetentities&ids=Q523974&props=claims&format=json (Caused by NameResolutionError("HTTPSConnection(host='www.wikidata.org', port=443): Failed to resolve 'www.wikidata.org' ([Errno 7] No address associated with hostname)"))
+Q386453 | QUERY ERROR | HTTPSConnectionPool(host='www.wikidata.org', port=443): Max retries exceeded with url: /w/api.php?action=wbgetentities&ids=Q386453&props=claims&format=json (Caused by NameResolutionError("HTTPSConnection(host='www.wikidata.org', port=443): Failed to resolve 'www.wikidata.org' ([Errno 7] No address associated with hostname)"))
+Q151143 | QUERY ERROR | HTTPSConnectionPool(host='www.wikidata.org', port=443): Max retries exceeded with url: /w/api.php?action=wbgetentities&ids=Q151143&props=claims&format=json (Caused by NameResolutionError("HTTPSConnection(host='www.wikidata.org', port=443): Failed to resolve 'www.wikidata.org' ([Errno 7] No address associated with hostname)"))
+Q167605 | QUERY ERROR | HTTPSConnectionPool(host='www.wikidata.org', port=443): Max retries exceeded with url: /w/api.php?action=wbgetentities&ids=Q167605&props=claims&format=json (Caused by NameResolutionError("HTTPSConnection(host='www.wikidata.org', port=443): Failed to resolve 'www.wikidata.org' ([Errno 7] No address associated with hostname)"))
+Q768333 | QUERY ERROR | HTTPSConnectionPool(host='www.wikidata.org', port=443): Max retries exceeded with url: /w/api.php?action=wbgetentities&ids=Q768333&props=claims&format=json (Caused by NameResolutionError("HTTPSConnection(host='www.wikidata.org', port=443): Failed to resolve 'www.wikidata.org' ([Errno 7] No address associated with hostname)"))
+Q325267 | QUERY ERROR | HTTPSConnectionPool(host='www.wikidata.org', port=443): Max retries exceeded with url: /w/api.php?action=wbgetentities&ids=Q325267&props=claims&format=json (Caused by NameResolutionError("HTTPSConnection(host='www.wikidata.org', port=443): Failed to resolve 'www.wikidata.org' ([Errno 7] No address associated with hostname)"))
+Q780930 | QUERY ERROR | HTTPSConnectionPool(host='www.wikidata.org', port=443): Max retries exceeded with url: /w/api.php?action=wbgetentities&ids=Q780930&props=claims&format=json (Caused by NameResolutionError("HTTPSConnection(host='www.wikidata.org', port=443): Failed to resolve 'www.wikidata.org' ([Errno 7] No address associated with hostname)"))
+Q133708 | QUERY ERROR | Network unreachable after retries
+Q180571 | QUERY ERROR | Network unreachable
+Q180652 | QUERY ERROR | Network unreachable
+Q184689 | QUERY ERROR | Network unreachable
+Q2133048 | QUERY ERROR | Network unreachable
+Q2137321 | QUERY ERROR | Network unreachable
+Q2143788 | QUERY ERROR | Network unreachable
+Q2152981 | QUERY ERROR | Network unreachable
+Q2167176 | QUERY ERROR | Network unreachable
+Q52273853 | METADATA ERROR | Network unreachable
+Q60503090 | QUERY ERROR | Network unreachable
+Q52152190 | QUERY ERROR | Network unreachable
+Q62092143 | QUERY ERROR | Network unreachable
+Q46626005 | QUERY ERROR | Network unreachable
+Q47513225 | QUERY ERROR | Network unreachable
+Q20177856 | QUERY ERROR | Network unreachable
+Q49270336 | QUERY ERROR | Network unreachable
+Q79015842 | QUERY ERROR | Network unreachable
+Q136766669 | QUERY ERROR | Network unreachable
+Q19913730 | QUERY ERROR | Network unreachable
+Q18687769 | QUERY ERROR | Network unreachable
+Q18748374 | QUERY ERROR | Network unreachable
+Q20266358 | QUERY ERROR | Network unreachable
+Q18683094 | QUERY ERROR | Network unreachable
+Q21130348 | QUERY ERROR | Network unreachable
+Q23830983 | QUERY ERROR | Network unreachable
+Q20534291 | QUERY ERROR | Network unreachable
+Q26652218 | QUERY ERROR | Network unreachable
+Q22338744 | QUERY ERROR | Network unreachable
+Q26159969 | QUERY ERROR | Network unreachable
+Q28810212 | QUERY ERROR | Network unreachable
+Q29226519 | QUERY ERROR | Network unreachable
+Q50676322 | QUERY ERROR | Network unreachable
+Q57932426 | QUERY ERROR | Network unreachable
+Q62125410 | QUERY ERROR | Network unreachable
+Q61947588 | QUERY ERROR | Network unreachable
+Q64686137 | QUERY ERROR | Network unreachable
+Q29920061 | QUERY ERROR | Network unreachable
+Q30098106 | QUERY ERROR | Network unreachable
+Q20557030 | QUERY ERROR | Network unreachable
+Q27032082 | QUERY ERROR | Network unreachable
+Q29218892 | QUERY ERROR | Network unreachable
+Q29218893 | QUERY ERROR | Network unreachable
+Q18688203 | QUERY ERROR | Network unreachable
+Q28002261 | QUERY ERROR | Network unreachable
+Q29920075 | QUERY ERROR | Network unreachable
+Q27971296 | QUERY ERROR | Network unreachable
+Q30096096 | QUERY ERROR | Network unreachable
+Q18573908 | QUERY ERROR | Network unreachable
+Q29959668 | QUERY ERROR | Network unreachable
+Q59442235 | QUERY ERROR | Network unreachable
+Q19926064 | QUERY ERROR | Network unreachable
+Q20273592 | QUERY ERROR | Network unreachable
+Q59489842 | QUERY ERROR | Network unreachable
+Q20391984 | QUERY ERROR | Network unreachable
+Q18573920 | QUERY ERROR | Network unreachable
+Q21675431 | QUERY ERROR | Network unreachable
+Q49191817 | QUERY ERROR | Network unreachable
+Q4430777 | QUERY ERROR | Network unreachable
+Q18599406 | QUERY ERROR | Network unreachable
+Q19686444 | QUERY ERROR | Network unreachable
+Q18573678 | QUERY ERROR | Network unreachable
+Q18573821 | QUERY ERROR | Network unreachable
+Q18573823 | QUERY ERROR | Network unreachable
+Q19939099 | QUERY ERROR | Network unreachable
+Q20176431 | QUERY ERROR | Network unreachable
+Q21157096 | QUERY ERROR | Network unreachable
+Q20354586 | QUERY ERROR | Network unreachable
+Q20505530 | QUERY ERROR | Network unreachable
+Q25998862 | QUERY ERROR | Network unreachable
+Q22812884 | QUERY ERROR | Network unreachable
+Q29192270 | QUERY ERROR | Network unreachable
+Q29230749 | QUERY ERROR | Network unreachable
+Q28113844 | QUERY ERROR | Network unreachable
+Q29871398 | QUERY ERROR | Network unreachable
+Q29477857 | QUERY ERROR | Network unreachable
+Q43225655 | QUERY ERROR | Network unreachable
+Q46498630 | QUERY ERROR | Network unreachable
+Q77994323 | QUERY ERROR | Network unreachable
+Q52234844 | QUERY ERROR | Network unreachable
+Q52153799 | QUERY ERROR | Network unreachable
+Q29320417 | QUERY ERROR | Network unreachable
+Q29335672 | QUERY ERROR | Network unreachable
+Q64547518 | QUERY ERROR | Network unreachable
+Q22992453 | QUERY ERROR | Network unreachable
+Q50632285 | QUERY ERROR | Network unreachable
+Q55868034 | QUERY ERROR | Network unreachable
+Q30056462 | QUERY ERROR | Network unreachable
+Q27000355 | QUERY ERROR | Network unreachable
+Q30058536 | QUERY ERROR | Network unreachable
+Q29964573 | QUERY ERROR | Network unreachable
+Q18573564 | QUERY ERROR | Network unreachable
+Q23928510 | QUERY ERROR | Network unreachable
+Q52208018 | QUERY ERROR | Network unreachable
+Q20477454 | QUERY ERROR | Network unreachable
+Q18573587 | QUERY ERROR | Network unreachable
+Q28032521 | QUERY ERROR | Network unreachable
+Q31201280 | QUERY ERROR | Network unreachable
+Q18242057 | QUERY ERROR | Network unreachable
+Q17484810 | QUERY ERROR | Network unreachable
+Q9191556 | QUERY ERROR | Network unreachable
+Q22236015 | QUERY ERROR | Network unreachable
+Q21715922 | QUERY ERROR | Network unreachable
+Q21614923 | QUERY ERROR | Network unreachable
+Q27752303 | QUERY ERROR | Network unreachable
+Q61730429 | QUERY ERROR | Network unreachable
+Q61935552 | QUERY ERROR | Network unreachable
+Q18917027 | QUERY ERROR | Network unreachable
+Q19820173 | QUERY ERROR | Network unreachable
+Q21485898 | QUERY ERROR | Network unreachable
+Q21617386 | QUERY ERROR | Network unreachable
+Q21614956 | QUERY ERROR | Network unreachable
+Q20392044 | QUERY ERROR | Network unreachable
+Q20561278 | QUERY ERROR | Network unreachable
+Q21778997 | QUERY ERROR | Network unreachable
+Q21716392 | QUERY ERROR | Network unreachable
+Q20881161 | QUERY ERROR | Network unreachable
+Q22237055 | QUERY ERROR | Network unreachable
+Q20891802 | QUERY ERROR | Network unreachable
+Q20891804 | QUERY ERROR | Network unreachable
+Q26710476 | QUERY ERROR | Network unreachable
+Q22237061 | QUERY ERROR | Network unreachable
+Q21677766 | QUERY ERROR | Network unreachable
+Q21678737 | QUERY ERROR | Network unreachable
+Q27981613 | QUERY ERROR | Network unreachable
+Q27950179 | QUERY ERROR | Network unreachable
+Q27749029 | QUERY ERROR | Network unreachable
+Q25820617 | QUERY ERROR | Network unreachable
+Q28062327 | QUERY ERROR | Network unreachable
+Q28064923 | QUERY ERROR | Network unreachable
+Q29116194 | QUERY ERROR | Network unreachable
+Q27981616 | QUERY ERROR | Network unreachable
+Q28860805 | QUERY ERROR | Network unreachable
+Q28870309 | QUERY ERROR | Network unreachable
+Q28017476 | QUERY ERROR | Network unreachable
+Q28801546 | QUERY ERROR | Network unreachable
+Q28801616 | QUERY ERROR | Network unreachable
+Q29320420 | QUERY ERROR | Network unreachable
+Q29846589 | QUERY ERROR | Network unreachable
+Q29847315 | QUERY ERROR | Network unreachable
+Q29426506 | QUERY ERROR | Network unreachable
+Q29533721 | QUERY ERROR | Network unreachable
+Q29902588 | QUERY ERROR | Network unreachable
+Q29863480 | QUERY ERROR | Network unreachable
+Q29863490 | QUERY ERROR | Network unreachable
+Q29857379 | QUERY ERROR | Network unreachable
+Q29152491 | QUERY ERROR | Network unreachable
+Q29898359 | QUERY ERROR | Network unreachable
+Q29937248 | QUERY ERROR | Network unreachable
+Q29938021 | QUERY ERROR | Network unreachable
+Q30094843 | QUERY ERROR | Network unreachable
+Q30094906 | QUERY ERROR | Network unreachable
+Q30094274 | QUERY ERROR | Network unreachable
+Q30099247 | QUERY ERROR | Network unreachable
+Q30094501 | QUERY ERROR | Network unreachable
+Q50666908 | QUERY ERROR | Network unreachable
+Q50686198 | QUERY ERROR | Network unreachable
+Q52220319 | QUERY ERROR | Network unreachable
+Q29964502 | QUERY ERROR | Network unreachable
+Q50820652 | QUERY ERROR | Network unreachable
+Q45310868 | QUERY ERROR | Network unreachable
+Q20017050 | QUERY ERROR | Network unreachable
+Q47413264 | QUERY ERROR | Network unreachable
+Q609576 | QUERY ERROR | Network unreachable
+Q3663792 | QUERY ERROR | Network unreachable
+Q16025001 | QUERY ERROR | Network unreachable
+Q27980126 | METADATA ERROR | Network unreachable
+Q16591039 | QUERY ERROR | Network unreachable
+Q9191570 | QUERY ERROR | Network unreachable
+Q3697627 | QUERY ERROR | Network unreachable
+Q20185562 | QUERY ERROR | Network unreachable
+Q50910744 | QUERY ERROR | Network unreachable
+Q72417286 | QUERY ERROR | Network unreachable
+Q2667782 | METADATA ERROR | Network unreachable
+Q9389442 | QUERY ERROR | Network unreachable
+Q3933572 | QUERY ERROR | Network unreachable
+Q28020505 | QUERY ERROR | Network unreachable
+Q29212827 | QUERY ERROR | Network unreachable
+Q29902569 | QUERY ERROR | Network unreachable
+Q29871362 | QUERY ERROR | Network unreachable
+Q2653851 | QUERY ERROR | Network unreachable
+Q3663793 | QUERY ERROR | Network unreachable
+Q16564738 | QUERY ERROR | Network unreachable
+Q5834301 | QUERY ERROR | Network unreachable
+Q17526002 | QUERY ERROR | Network unreachable
+Q16536552 | QUERY ERROR | Network unreachable
+Q17331781 | QUERY ERROR | Network unreachable
+Q20180050 | QUERY ERROR | Network unreachable
+Q18683395 | QUERY ERROR | Network unreachable
+Q19912044 | QUERY ERROR | Network unreachable
+Q18749331 | QUERY ERROR | Network unreachable
+Q18683387 | QUERY ERROR | Network unreachable
+Q20808930 | QUERY ERROR | Network unreachable
+Q19911449 | QUERY ERROR | Network unreachable
+Q22236988 | QUERY ERROR | Network unreachable
+Q27980723 | QUERY ERROR | Network unreachable
+Q27979528 | QUERY ERROR | Network unreachable
+Q27896938 | QUERY ERROR | Network unreachable
+Q22672592 | QUERY ERROR | Network unreachable
+Q22683993 | QUERY ERROR | Network unreachable
+Q22443800 | QUERY ERROR | Network unreachable
+Q23008331 | QUERY ERROR | Network unreachable
+Q29321678 | QUERY ERROR | Network unreachable
+Q30096127 | QUERY ERROR | Network unreachable
+Q51188728 | QUERY ERROR | Network unreachable
+Q2277635 | QUERY ERROR | Network unreachable
+Q18683388 | QUERY ERROR | Network unreachable
+Q21121979 | QUERY ERROR | Network unreachable
+Q27132792 | QUERY ERROR | Network unreachable
+Q27883386 | QUERY ERROR | Network unreachable
+Q27981735 | QUERY ERROR | Network unreachable
+Q49215082 | QUERY ERROR | Network unreachable
+Q64799413 | QUERY ERROR | Network unreachable
+Q5693444 | QUERY ERROR | Network unreachable
+Q27976428 | QUERY ERROR | Network unreachable
+Q29902576 | QUERY ERROR | Network unreachable
+Q30094530 | QUERY ERROR | Network unreachable
+Q30096102 | QUERY ERROR | Network unreachable
+Q30098019 | QUERY ERROR | Network unreachable
+Q2264942 | QUERY ERROR | Network unreachable
+Q23928495 | QUERY ERROR | Network unreachable
+Q27981974 | QUERY ERROR | Network unreachable
+Q27700836 | QUERY ERROR | Network unreachable
+Q29044248 | QUERY ERROR | Network unreachable
+Q2419166 | QUERY ERROR | Network unreachable
+Q30097825 | QUERY ERROR | Network unreachable
+Q30335941 | QUERY ERROR | Network unreachable
+Q52220808 | QUERY ERROR | Network unreachable
+Q56701877 | QUERY ERROR | Network unreachable
+Q50691907 | QUERY ERROR | Network unreachable
+Q29960170 | QUERY ERROR | Network unreachable
+Q29964500 | QUERY ERROR | Network unreachable
+Q50885679 | QUERY ERROR | Network unreachable
+Q60515970 | QUERY ERROR | Network unreachable
+Q52244828 | QUERY ERROR | Network unreachable
+Q59911144 | QUERY ERROR | Network unreachable
+Q72697855 | QUERY ERROR | Network unreachable
+Q27981407 | QUERY ERROR | Network unreachable
+Q64800388 | QUERY ERROR | Network unreachable
+Q3697589 | QUERY ERROR | Network unreachable
+Q19911711 | QUERY ERROR | Network unreachable
+Q29871343 | QUERY ERROR | Network unreachable
+Q29871367 | QUERY ERROR | Network unreachable
+Q617629 | QUERY ERROR | Network unreachable
+Q17275922 | QUERY ERROR | Network unreachable
+Q5966352 | QUERY ERROR | Network unreachable
+Q27980085 | QUERY ERROR | Network unreachable
+Q30095752 | QUERY ERROR | Network unreachable
+Q30099228 | QUERY ERROR | Network unreachable
+Q29953642 | QUERY ERROR | Network unreachable
+Q5824027 | QUERY ERROR | Network unreachable
+Q19912904 | QUERY ERROR | Network unreachable
+Q52202694 | QUERY ERROR | Network unreachable
+Q29920122 | QUERY ERROR | Network unreachable
+Q30099325 | QUERY ERROR | Network unreachable
+Q31188989 | QUERY ERROR | Network unreachable
+Q2472983 | QUERY ERROR | Network unreachable
+Q935815 | QUERY ERROR | Network unreachable
+Q19911628 | QUERY ERROR | Network unreachable
+Q21675373 | QUERY ERROR | Network unreachable
+Q66986429 | QUERY ERROR | Network unreachable
+Q609572 | QUERY ERROR | Network unreachable
+Q2292041 | QUERY ERROR | 'datavalue'
+Q4311015 | QUERY ERROR | Network unreachable
+Q76556432 | QUERY ERROR | Network unreachable
+Q76556437 | QUERY ERROR | Network unreachable
+Q76556438 | QUERY ERROR | Network unreachable
+Q85503223 | QUERY ERROR | Network unreachable
+Q85503224 | QUERY ERROR | Network unreachable
+Q85503229 | QUERY ERROR | Network unreachable
+Q85503231 | QUERY ERROR | Network unreachable
+Q85503233 | QUERY ERROR | Network unreachable
+Q85503234 | QUERY ERROR | Network unreachable
+Q85503235 | QUERY ERROR | Network unreachable
+Q85503241 | METADATA ERROR | Network unreachable
+Q85503243 | QUERY ERROR | Network unreachable
+Q85503244 | QUERY ERROR | Network unreachable
+Q101436738 | QUERY ERROR | Network unreachable
+Q101606223 | QUERY ERROR | Network unreachable
+Q101623454 | QUERY ERROR | Network unreachable
+Q101623588 | QUERY ERROR | Network unreachable
+Q102079618 | QUERY ERROR | Network unreachable
+Q102079619 | QUERY ERROR | Network unreachable
+Q102079624 | QUERY ERROR | Network unreachable
+Q102079626 | QUERY ERROR | Network unreachable
+Q102079640 | QUERY ERROR | Network unreachable
+Q13048273 | QUERY ERROR | Network unreachable
+Q101199720 | QUERY ERROR | Network unreachable
+Q101200168 | QUERY ERROR | Network unreachable
+Q101200473 | QUERY ERROR | Network unreachable
+Q101200501 | QUERY ERROR | Network unreachable
+Q101200527 | QUERY ERROR | Network unreachable
+Q101201373 | QUERY ERROR | Network unreachable
+Q101201489 | QUERY ERROR | Network unreachable
+Q101201555 | QUERY ERROR | Network unreachable
+Q101201586 | QUERY ERROR | Network unreachable
+Q101202483 | QUERY ERROR | Network unreachable
+Q101202513 | QUERY ERROR | Network unreachable
+Q101202601 | QUERY ERROR | Network unreachable
+Q101202653 | QUERY ERROR | Network unreachable
+Q101208641 | QUERY ERROR | Network unreachable
+Q101208647 | QUERY ERROR | Network unreachable
+Q101208653 | QUERY ERROR | Network unreachable
+Q101222873 | QUERY ERROR | Network unreachable
+Q101222887 | QUERY ERROR | Network unreachable
+Q101222902 | QUERY ERROR | Network unreachable
+Q101222968 | QUERY ERROR | Network unreachable
+Q101222977 | QUERY ERROR | Network unreachable
+Q85503246 | QUERY ERROR | Network unreachable
+Q85503251 | QUERY ERROR | Network unreachable
+Q85503252 | QUERY ERROR | Network unreachable
+Q85503254 | QUERY ERROR | Network unreachable
+Q85503257 | QUERY ERROR | Network unreachable
+Q85503259 | QUERY ERROR | Network unreachable
+Q85503261 | QUERY ERROR | Network unreachable
+Q85503263 | QUERY ERROR | Network unreachable
+Q85503265 | QUERY ERROR | Network unreachable
+Q85503267 | QUERY ERROR | Network unreachable
+Q85503271 | QUERY ERROR | Network unreachable
+Q85503274 | QUERY ERROR | Network unreachable
+Q85503276 | QUERY ERROR | Network unreachable
+Q85503280 | QUERY ERROR | Network unreachable
+Q85503282 | QUERY ERROR | Network unreachable
+Q85503283 | QUERY ERROR | Network unreachable
+Q85503285 | QUERY ERROR | Network unreachable
+Q85503287 | QUERY ERROR | Network unreachable
+Q85503290 | QUERY ERROR | Network unreachable
+Q16676215 | QUERY ERROR | Network unreachable
+Q16679343 | QUERY ERROR | Network unreachable

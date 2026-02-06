@@ -1,0 +1,62 @@
+[INFO   ] Logger: Record log in /storage/emulated/0/Download/ArtCrawler/.kivy/logs/kivy_26-02-05_1.txt
+[INFO   ] Kivy: v2.3.1
+[INFO   ] Kivy: Installed at "/data/user/0/ru.iiec.pydroid3/files/aarch64-linux-android/lib/python3.13/site-packages/kivy/__init__.py"
+[INFO   ] Python: v3.13.2 (main, Apr 27 2025, 04:34:27) [GCC 11.4.0]
+[INFO   ] Python: Interpreter at "/data/user/0/ru.iiec.pydroid3/files/aarch64-linux-android/bin/python3"
+[INFO   ] Logger: Purge log fired. Processing...
+[INFO   ] Logger: Purge finished!
+[INFO   ] Factory: 195 symbols loaded
+[INFO   ] Image: Providers: img_tex, img_dds, img_sdl2, img_pil (img_ffpyplayer ignored)
+[INFO   ] Window: Provider: sdl2
+[INFO   ] GL: Using the "OpenGL ES 2" graphics system
+[INFO   ] GL: Backend used <sdl2>
+[INFO   ] GL: OpenGL version <b'OpenGL ES 3.2 v1.r54p1-12eac0.31596c752a7e2ed34e05ad43c82dd58d'>
+[INFO   ] GL: OpenGL vendor <b'ARM'>
+[INFO   ] GL: OpenGL renderer <b'Mali-G57 MC2'>
+[INFO   ] GL: OpenGL parsed version: 3, 2
+[INFO   ] GL: Texture max size <16383>
+[INFO   ] GL: Texture max units <16>
+[INFO   ] Window: auto add sdl2 input provider
+[INFO   ] Window: virtual keyboard not allowed, single mode, not docked
+[INFO   ] Text: Provider: sdl2
+[WARNING] Base: Unknown <android> provider
+[INFO   ] Base: Start application main loop
+[INFO   ] GL: NPOT texture support is available
+[INFO   ] Base: Leaving application in progress...
+[WARNING] stderr: Traceback (most recent call last):
+[WARNING] stderr:   File "/storage/emulated/0/Download/ArtCrawler/main.py", line 91, in <module>
+[WARNING] stderr:     ArtCrawlerApp().run()
+[WARNING] stderr:     ~~~~~~~~~~~~~~~~~~~^^
+[WARNING] stderr:   File "/data/user/0/ru.iiec.pydroid3/files/aarch64-linux-android/lib/python3.13/site-packages/kivy/app.py", line 956, in run
+[WARNING] stderr:     runTouchApp()
+[WARNING] stderr:     ~~~~~~~~~~~^^
+[WARNING] stderr:   File "/data/user/0/ru.iiec.pydroid3/files/aarch64-linux-android/lib/python3.13/site-packages/kivy/base.py", line 574, in runTouchApp
+[WARNING] stderr:     EventLoop.mainloop()
+[WARNING] stderr:     ~~~~~~~~~~~~~~~~~~^^
+[WARNING] stderr:   File "/data/user/0/ru.iiec.pydroid3/files/aarch64-linux-android/lib/python3.13/site-packages/kivy/base.py", line 339, in mainloop
+[WARNING] stderr:     self.idle()
+[WARNING] stderr:     ~~~~~~~~~^^
+[WARNING] stderr:   File "/data/user/0/ru.iiec.pydroid3/files/aarch64-linux-android/lib/python3.13/site-packages/kivy/base.py", line 383, in idle
+[WARNING] stderr:     self.dispatch_input()
+[WARNING] stderr:     ~~~~~~~~~~~~~~~~~~~^^
+[WARNING] stderr:   File "/data/user/0/ru.iiec.pydroid3/files/aarch64-linux-android/lib/python3.13/site-packages/kivy/base.py", line 334, in dispatch_input
+[WARNING] stderr:     post_dispatch_input(*pop(0))
+[WARNING] stderr:     ~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+[WARNING] stderr:   File "/data/user/0/ru.iiec.pydroid3/files/aarch64-linux-android/lib/python3.13/site-packages/kivy/base.py", line 302, in post_dispatch_input
+[WARNING] stderr:     wid.dispatch('on_touch_up', me)
+[WARNING] stderr:     ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+[WARNING] stderr:   File "kivy/_event.pyx", line 731, in kivy._event.EventDispatcher.dispatch
+[WARNING] stderr:   File "/data/user/0/ru.iiec.pydroid3/files/aarch64-linux-android/lib/python3.13/site-packages/kivy/uix/behaviors/button.py", line 179, in on_touch_up
+[WARNING] stderr:     self.dispatch('on_release')
+[WARNING] stderr:     ~~~~~~~~~~~~~^^^^^^^^^^^^^^
+[WARNING] stderr:   File "kivy/_event.pyx", line 727, in kivy._event.EventDispatcher.dispatch
+[WARNING] stderr:   File "kivy/_event.pyx", line 1307, in kivy._event.EventObservers.dispatch
+[WARNING] stderr:   File "kivy/_event.pyx", line 1191, in kivy._event.EventObservers._dispatch
+[WARNING] stderr:   File "/data/user/0/ru.iiec.pydroid3/files/aarch64-linux-android/lib/python3.13/site-packages/kivy/lang/builder.py", line 60, in custom_callback
+[WARNING] stderr:     exec(__kvlang__.co_value, idmap)
+[WARNING] stderr:     ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[WARNING] stderr:   File "/storage/emulated/0/Download/ArtCrawler/artcrawler.kv", line 54, in <module>
+[WARNING] stderr:     on_release: root.start_indexer()
+[WARNING] stderr:     
+[WARNING] stderr:   File "kivy/weakproxy.pyx", line 32, in kivy.weakproxy.WeakProxy.__getattr__
+[WARNING] stderr: AttributeError: 'HomeScreen' object has no attribute 'start_indexer'

@@ -1,0 +1,136 @@
+<RootManager>:
+    HomeScreen:
+    LogScreen:
+<HomeScreen>:
+    name: "home"
+
+    BoxLayout:
+        orientation: "vertical"
+        padding: dp(10)
+        spacing: dp(10)
+
+        # -------------------------
+        # EXPANDING STATUS PANEL (FIXED)
+        # -------------------------
+        ScrollView:
+            do_scroll_y: True
+            do_scroll_x: False
+            size_hint_y: None
+            height: dp(180)
+
+            BoxLayout:
+                orientation: "vertical"
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: dp(6)
+
+                Label:
+                    id: crawler_status
+                    text: root.crawler_status_text
+                    font_size: dp(14)
+                    halign: "left"
+                    valign: "top"
+                    text_size: self.width, None
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                Label:
+                    id: indexer_status
+                    text: root.indexer_status_text
+                    font_size: dp(14)
+                    halign: "left"
+                    valign: "top"
+                    text_size: self.width, None
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                Label:
+                    id: db_status
+                    text: root.db_stats_text
+                    font_size: dp(14)
+                    halign: "left"
+                    valign: "top"
+                    text_size: self.width, None
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+        # -------------------------
+        # Buttons area
+        # -------------------------
+        ScrollView:
+            do_scroll_y: True
+            do_scroll_x: False
+
+            BoxLayout:
+                orientation: "vertical"
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: dp(10)
+
+                Button:
+                    text: "Start Crawler"
+                    font_size: dp(18)
+                    size_hint_y: None
+                    height: dp(48)
+                    on_release: root.start_crawler()
+
+                Button:
+                    text: "Stop Crawler"
+                    font_size: dp(18)
+                    size_hint_y: None
+                    height: dp(48)
+                    on_release: root.stop_crawler()
+
+                Button:
+                    text: "Start Indexer"
+                    font_size: dp(18)
+                    size_hint_y: None
+                    height: dp(48)
+                    on_release: root.start_indexer()
+
+                Button:
+                    text: "Stop Indexer"
+                    font_size: dp(18)
+                    size_hint_y: None
+                    height: dp(48)
+                    on_release: root.stop_indexer()
+
+                Button:
+                    text: "View Logs"
+                    font_size: dp(18)
+                    size_hint_y: None
+                    height: dp(48)
+                    on_release: app.root.current = "logs"
+
+
+<LogScreen>:
+    name: "logs"
+
+    BoxLayout:
+        orientation: "vertical"
+        padding: dp(10)
+        spacing: dp(10)
+
+        Label:
+            text: "Live Logs"
+            font_size: dp(20)
+            size_hint_y: None
+            height: dp(40)
+
+        ScrollView:
+            do_scroll_y: True
+            do_scroll_x: False
+
+            Label:
+                id: log_text
+                text: root.log_text
+                font_size: dp(14)
+                text_size: self.width, None
+                size_hint_y: None
+                height: self.texture_size[1]
+
+        Button:
+            text: "Back"
+            size_hint_y: None
+            height: dp(48)
+            on_release: app.root.current = "home"

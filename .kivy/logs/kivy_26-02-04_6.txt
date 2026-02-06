@@ -1,0 +1,102 @@
+[INFO   ] Logger: Record log in /storage/emulated/0/Download/ArtCrawler/.kivy/logs/kivy_26-02-04_6.txt
+[INFO   ] Kivy: v2.3.1
+[INFO   ] Kivy: Installed at "/data/user/0/ru.iiec.pydroid3/files/aarch64-linux-android/lib/python3.13/site-packages/kivy/__init__.py"
+[INFO   ] Python: v3.13.2 (main, Apr 27 2025, 04:34:27) [GCC 11.4.0]
+[INFO   ] Python: Interpreter at "/data/user/0/ru.iiec.pydroid3/files/aarch64-linux-android/bin/python3"
+[INFO   ] Logger: Purge log fired. Processing...
+[INFO   ] Logger: Purge finished!
+[INFO   ] Factory: 195 symbols loaded
+[INFO   ] Image: Providers: img_tex, img_dds, img_sdl2, img_pil (img_ffpyplayer ignored)
+[INFO   ] Window: Provider: sdl2
+[INFO   ] GL: Using the "OpenGL ES 2" graphics system
+[INFO   ] GL: Backend used <sdl2>
+[INFO   ] GL: OpenGL version <b'OpenGL ES 3.2 v1.r54p1-12eac0.31596c752a7e2ed34e05ad43c82dd58d'>
+[INFO   ] GL: OpenGL vendor <b'ARM'>
+[INFO   ] GL: OpenGL renderer <b'Mali-G57 MC2'>
+[INFO   ] GL: OpenGL parsed version: 3, 2
+[INFO   ] GL: Texture max size <16383>
+[INFO   ] GL: Texture max units <16>
+[INFO   ] Window: auto add sdl2 input provider
+[INFO   ] Window: virtual keyboard not allowed, single mode, not docked
+[INFO   ] Text: Provider: sdl2
+[WARNING] Base: Unknown <android> provider
+[INFO   ] Base: Start application main loop
+[INFO   ] GL: NPOT texture support is available
+[DEBUG  ] Starting new HTTPS connection (1): www.wikidata.org:443
+[DEBUG  ] https://www.wikidata.org:443 "GET /w/api.php?action=wbgetentities&ids=Q21679741&props=claims&format=json HTTP/1.1" 200 None
+[DEBUG  ] Starting new HTTPS connection (1): commons.wikimedia.org:443
+[DEBUG  ] https://commons.wikimedia.org:443 "GET /w/api.php?action=query&titles=File%3AWiki+Loves+Art+-+Gent+-+Museum+voor+Schone+Kunsten+-+De+kruisdraging+%28Q21679741%29+%281%29.JPG&prop=imageinfo&iiprop=url%7Csize%7Cmime%7Cextmetadata%7Cdimensions&format=json HTTP/1.1" 200 None
+[DEBUG  ] Starting new HTTPS connection (1): commons.wikimedia.org:443
+[DEBUG  ] https://commons.wikimedia.org:443 "GET /w/thumb.php?width=1500&f=Wiki%20Loves%20Art%20-%20Gent%20-%20Museum%20voor%20Schone%20Kunsten%20-%20De%20kruisdraging%20%28Q21679741%29%20%281%29.JPG HTTP/1.1" 200 None
+[DEBUG  ] Starting new HTTPS connection (1): www.wikidata.org:443
+[DEBUG  ] https://www.wikidata.org:443 "GET /w/api.php?action=wbgetentities&ids=Q22058870&props=claims&format=json HTTP/1.1" 200 None
+[DEBUG  ] Starting new HTTPS connection (1): commons.wikimedia.org:443
+[DEBUG  ] https://commons.wikimedia.org:443 "GET /w/api.php?action=query&titles=File%3ACornelis+van+Haarlem+Christ.jpg&prop=imageinfo&iiprop=url%7Csize%7Cmime%7Cextmetadata%7Cdimensions&format=json HTTP/1.1" 200 None
+[DEBUG  ] Starting new HTTPS connection (1): commons.wikimedia.org:443
+[DEBUG  ] https://commons.wikimedia.org:443 "GET /w/thumb.php?width=1500&f=Cornelis%20van%20Haarlem%20Christ.jpg HTTP/1.1" 200 None
+[DEBUG  ] Starting new HTTPS connection (1): www.wikidata.org:443
+[DEBUG  ] https://www.wikidata.org:443 "GET /w/api.php?action=wbgetentities&ids=Q28838030&props=claims&format=json HTTP/1.1" 200 None
+[DEBUG  ] Starting new HTTPS connection (1): commons.wikimedia.org:443
+[DEBUG  ] https://commons.wikimedia.org:443 "GET /w/api.php?action=query&titles=File%3AMerli+Madonna+and+Child.jpg&prop=imageinfo&iiprop=url%7Csize%7Cmime%7Cextmetadata%7Cdimensions&format=json HTTP/1.1" 200 None
+[DEBUG  ] Starting new HTTPS connection (1): commons.wikimedia.org:443
+[DEBUG  ] https://commons.wikimedia.org:443 "GET /w/thumb.php?width=1500&f=Merli%20Madonna%20and%20Child.jpg HTTP/1.1" 200 None
+[DEBUG  ] Starting new HTTPS connection (1): www.wikidata.org:443
+[DEBUG  ] https://www.wikidata.org:443 "GET /w/api.php?action=wbgetentities&ids=Q11916108&props=claims&format=json HTTP/1.1" 200 None
+[DEBUG  ] Starting new HTTPS connection (1): commons.wikimedia.org:443
+[DEBUG  ] https://commons.wikimedia.org:443 "GET /w/api.php?action=query&titles=File%3AEl+Greco+-+Christ+Carrying+the+Cross+-+Google+Art+Project.jpg&prop=imageinfo&iiprop=url%7Csize%7Cmime%7Cextmetadata%7Cdimensions&format=json HTTP/1.1" 200 None
+[DEBUG  ] Starting new HTTPS connection (1): commons.wikimedia.org:443
+[DEBUG  ] https://commons.wikimedia.org:443 "GET /w/thumb.php?width=1500&f=El%20Greco%20-%20Christ%20Carrying%20the%20Cross%20-%20Google%20Art%20Project.jpg HTTP/1.1" 200 None
+[DEBUG  ] Starting new HTTPS connection (1): www.wikidata.org:443
+[DEBUG  ] https://www.wikidata.org:443 "GET /w/api.php?action=wbgetentities&ids=Q18225401&props=claims&format=json HTTP/1.1" 200 None
+[DEBUG  ] Starting new HTTPS connection (1): commons.wikimedia.org:443
+[DEBUG  ] https://commons.wikimedia.org:443 "GET /w/api.php?action=query&titles=File%3ACristo+abrazando+la+cruz%2C+de+El+Greco+%28Museo+Thyssen-Bornemisza%29.jpg&prop=imageinfo&iiprop=url%7Csize%7Cmime%7Cextmetadata%7Cdimensions&format=json HTTP/1.1" 200 None
+[DEBUG  ] Starting new HTTPS connection (1): commons.wikimedia.org:443
+[DEBUG  ] https://commons.wikimedia.org:443 "GET /w/thumb.php?width=1500&f=Cristo%20abrazando%20la%20cruz%2C%20de%20El%20Greco%20%28Museo%20Thyssen-Bornemisza%29.jpg HTTP/1.1" 200 None
+[DEBUG  ] Starting new HTTPS connection (1): www.wikidata.org:443
+[DEBUG  ] https://www.wikidata.org:443 "GET /w/api.php?action=wbgetentities&ids=Q5791685&props=claims&format=json HTTP/1.1" 200 None
+[DEBUG  ] Starting new HTTPS connection (1): commons.wikimedia.org:443
+[DEBUG  ] https://commons.wikimedia.org:443 "GET /w/api.php?action=query&titles=File%3AEl+Greco+-+Le+Christ+en+croix+ador%C3%A9+par+deux+donateurs+02.jpg&prop=imageinfo&iiprop=url%7Csize%7Cmime%7Cextmetadata%7Cdimensions&format=json HTTP/1.1" 200 898
+[DEBUG  ] Starting new HTTPS connection (1): commons.wikimedia.org:443
+[DEBUG  ] https://commons.wikimedia.org:443 "GET /w/thumb.php?width=1500&f=El%20Greco%20-%20Le%20Christ%20en%20croix%20ador%C3%A9%20par%20deux%20donateurs%2002.jpg HTTP/1.1" 200 None
+[DEBUG  ] Starting new HTTPS connection (1): www.wikidata.org:443
+[DEBUG  ] https://www.wikidata.org:443 "GET /w/api.php?action=wbgetentities&ids=Q19911654&props=claims&format=json HTTP/1.1" 200 None
+[DEBUG  ] Starting new HTTPS connection (1): commons.wikimedia.org:443
+[DEBUG  ] https://commons.wikimedia.org:443 "GET /w/api.php?action=query&titles=File%3AThe+Baptism+of+Christ+by+Jacopo+Bassano.jpg&prop=imageinfo&iiprop=url%7Csize%7Cmime%7Cextmetadata%7Cdimensions&format=json HTTP/1.1" 200 None
+[DEBUG  ] Starting new HTTPS connection (1): commons.wikimedia.org:443
+[DEBUG  ] https://commons.wikimedia.org:443 "GET /w/thumb.php?width=1500&f=The%20Baptism%20of%20Christ%20by%20Jacopo%20Bassano.jpg HTTP/1.1" 200 None
+[DEBUG  ] Starting new HTTPS connection (1): www.wikidata.org:443
+[DEBUG  ] https://www.wikidata.org:443 "GET /w/api.php?action=wbgetentities&ids=Q20631541&props=claims&format=json HTTP/1.1" 200 None
+[DEBUG  ] Starting new HTTPS connection (1): commons.wikimedia.org:443
+[DEBUG  ] https://commons.wikimedia.org:443 "GET /w/api.php?action=query&titles=File%3AManner+or+circle+of+the+Master+of+the+Virgo+inter+Virgines+001+front.jpg&prop=imageinfo&iiprop=url%7Csize%7Cmime%7Cextmetadata%7Cdimensions&format=json HTTP/1.1" 200 None
+[DEBUG  ] Starting new HTTPS connection (1): commons.wikimedia.org:443
+[DEBUG  ] https://commons.wikimedia.org:443 "GET /w/thumb.php?width=1500&f=Manner%20or%20circle%20of%20the%20Master%20of%20the%20Virgo%20inter%20Virgines%20001%20front.jpg HTTP/1.1" 200 None
+[DEBUG  ] Starting new HTTPS connection (1): query.wikidata.org:443
+[DEBUG  ] Starting new HTTPS connection (1): query.wikidata.org:443
+[DEBUG  ] Starting new HTTPS connection (1): query.wikidata.org:443
+[DEBUG  ] Starting new HTTPS connection (1): query.wikidata.org:443
+[DEBUG  ] Starting new HTTPS connection (1): query.wikidata.org:443
+[DEBUG  ] Starting new HTTPS connection (1): query.wikidata.org:443
+[DEBUG  ] Starting new HTTPS connection (1): query.wikidata.org:443
+[DEBUG  ] Starting new HTTPS connection (1): query.wikidata.org:443
+[DEBUG  ] Starting new HTTPS connection (1): query.wikidata.org:443
+[DEBUG  ] Starting new HTTPS connection (1): query.wikidata.org:443
+[DEBUG  ] Starting new HTTPS connection (1): query.wikidata.org:443
+[DEBUG  ] Starting new HTTPS connection (1): query.wikidata.org:443
+[DEBUG  ] Starting new HTTPS connection (1): query.wikidata.org:443
+[DEBUG  ] Starting new HTTPS connection (1): query.wikidata.org:443
+[DEBUG  ] Starting new HTTPS connection (1): query.wikidata.org:443
+[DEBUG  ] Starting new HTTPS connection (1): query.wikidata.org:443
+[DEBUG  ] Starting new HTTPS connection (1): query.wikidata.org:443
+[DEBUG  ] Starting new HTTPS connection (1): query.wikidata.org:443
+[DEBUG  ] Starting new HTTPS connection (1): query.wikidata.org:443
+[DEBUG  ] Starting new HTTPS connection (1): query.wikidata.org:443
+[DEBUG  ] Starting new HTTPS connection (1): query.wikidata.org:443
+[DEBUG  ] Starting new HTTPS connection (1): query.wikidata.org:443
+[DEBUG  ] Starting new HTTPS connection (1): query.wikidata.org:443
+[DEBUG  ] Starting new HTTPS connection (1): query.wikidata.org:443
+[DEBUG  ] Starting new HTTPS connection (1): query.wikidata.org:443
+[DEBUG  ] Starting new HTTPS connection (1): query.wikidata.org:443
+[DEBUG  ] Starting new HTTPS connection (1): query.wikidata.org:443
+[DEBUG  ] Starting new HTTPS connection (1): query.wikidata.org:443
+[DEBUG  ] Starting new HTTPS connection (1): query.wikidata.org:443
+[DEBUG  ] Starting new HTTPS connection (1): query.wikidata.org:443
