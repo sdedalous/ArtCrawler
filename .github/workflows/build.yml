@@ -31,9 +31,10 @@ jobs:
         mkdir -p $HOME/android-sdk
         cd $HOME/android-sdk
         wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O cmdtools.zip
-        unzip cmdtools.zip -d cmdline-tools
+        unzip cmdtools.zip -d cmdline-tools-temp
         mkdir -p cmdline-tools/latest
-        mv cmdline-tools/* cmdline-tools/latest/
+        mv cmdline-tools-temp/cmdline-tools/* cmdline-tools/latest/
+        rm -rf cmdline-tools-temp
         yes | cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/android-sdk "platform-tools" "platforms;android-33" "build-tools;33.0.2"
 
     - name: Build APK
