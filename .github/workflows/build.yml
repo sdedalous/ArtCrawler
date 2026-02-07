@@ -45,6 +45,39 @@ jobs:
 
     - name: Force Buildozer to use our SDK
       run: |
+        cat >> buildozer.spec << 'EOF'
+[android]
+sdk_dir = /home/runner/android-sdk
+ndk_dir = /home/runner/android-sdk/ndk-bundle
+android_api = 33
+android_minapi = 21
+use_android_sdk = True
+EOF
+
+    - name: Delete Buildozer internal SDK
+      run: |
+        rm -rf /home/runner/.buildozer/android/platform/android-sdk
+
+    - name: Build APK
+      run: |
+        buildozer android debug
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: ArtCrawler-APK
+        path: bin/*.apk
+        mkdir -p $HOME/android-sdk
+        cd $HOME/android-sdk
+        wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O cmdtools.zip
+        unzip cmdtools.zip -d cmdline-tools-temp
+        mkdir -p cmdline-tools/latest
+        mv cmdline-tools-temp/cmdline-tools/* cmdline-tools/latest/
+        rm -rf cmdline-tools-temp
+        yes | cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/android-sdk "platform-tools" "platforms;android-33" "build-tools;33.0.2"
+
+    - name: Force Buildozer to use our SDK
+      run: |
         sed -i '/^
 
 \[android\]
