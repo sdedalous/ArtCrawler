@@ -27,11 +27,19 @@ jobs:
 
     - name: Install Android SDK/NDK
       run: |
-        sudo apt install -y openjdk-17-jdk
-        sudo apt install -y unzip
+        sudo apt install -y openjdk-17-jdk unzip
+        mkdir -p $HOME/android-sdk
+        cd $HOME/android-sdk
+        wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O cmdtools.zip
+        unzip cmdtools.zip -d cmdline-tools
+        mkdir -p cmdline-tools/latest
+        mv cmdline-tools/* cmdline-tools/latest/
+        yes | cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/android-sdk "platform-tools" "platforms;android-33" "build-tools;33.0.2"
 
     - name: Build APK
       run: |
+        export ANDROIDSDK="$HOME/android-sdk"
+        export ANDROIDNDK="$HOME/android-sdk/ndk-bundle"
         buildozer android debug
 
     - name: Upload APK
@@ -39,4 +47,3 @@ jobs:
       with:
         name: ArtCrawler-APK
         path: bin/*.apk
-
