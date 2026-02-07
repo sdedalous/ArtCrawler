@@ -12,6 +12,8 @@ jobs:
     env:
       ANDROIDSDK: $HOME/android-sdk
       ANDROIDNDK: $HOME/android-sdk/ndk-bundle
+      ANDROIDAPI: 33
+      ANDROIDMINAPI: 21
 
     steps:
     - name: Checkout code
@@ -40,6 +42,44 @@ jobs:
         mv cmdline-tools-temp/cmdline-tools/* cmdline-tools/latest/
         rm -rf cmdline-tools-temp
         yes | cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/android-sdk "platform-tools" "platforms;android-33" "build-tools;33.0.2"
+
+    - name: Force Buildozer to use our SDK BEFORE initialization
+      run: |
+        sed -i '/^
+
+\[android\]
+
+/a sdk_dir = '"$HOME"'/android-sdk' buildozer.spec
+        sed -i '/^
+
+\[android\]
+
+/a ndk_dir = '"$HOME"'/android-sdk/ndk-bundle' buildozer.spec
+        sed -i '/^
+
+\[android\]
+
+/a android_api = 33' buildozer.spec
+        sed -i '/^
+
+\[android\]
+
+/a android_minapi = 21' buildozer.spec
+        sed -i '/^
+
+\[android\]
+
+/a android_sdk_path = '"$HOME"'/android-sdk' buildozer.spec
+        sed -i '/^
+
+\[android\]
+
+/a android_ndk_path = '"$HOME"'/android-sdk/ndk-bundle' buildozer.spec
+        sed -i '/^
+
+\[android\]
+
+/a use_android_sdk = True' buildozer.spec
 
     - name: Build APK
       run: |
