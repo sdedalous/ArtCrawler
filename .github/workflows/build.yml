@@ -9,6 +9,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      ANDROIDSDK: $HOME/android-sdk
+      ANDROIDNDK: $HOME/android-sdk/ndk-bundle
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -39,8 +43,6 @@ jobs:
 
     - name: Build APK
       run: |
-        export ANDROIDSDK="$HOME/android-sdk"
-        export ANDROIDNDK="$HOME/android-sdk/ndk-bundle"
         buildozer android debug
 
     - name: Upload APK
