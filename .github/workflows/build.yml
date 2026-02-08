@@ -45,14 +45,12 @@ jobs:
 
       - name: Add Android config to buildozer.spec
         run: |
-          cat << 'EOF' > android_config.txt
-[android]
-sdk_dir = /home/runner/android-sdk
-ndk_dir = /home/runner/android-sdk/ndk-bundle
-android_api = 33
-android_minapi = 21
-use_android_sdk = True
-EOF
+          echo "[android]" > android_config.txt
+          echo "sdk_dir = /home/runner/android-sdk" >> android_config.txt
+          echo "ndk_dir = /home/runner/android-sdk/ndk-bundle" >> android_config.txt
+          echo "android_api = 33" >> android_config.txt
+          echo "android_minapi = 21" >> android_config.txt
+          echo "use_android_sdk = True" >> android_config.txt
 
           cat android_config.txt >> buildozer.spec
 
@@ -69,4 +67,3 @@ EOF
         with:
           name: ArtCrawler-APK
           path: bin/*.apk
-
