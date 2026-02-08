@@ -43,19 +43,13 @@ jobs:
           mv cmdline-tools-temp/cmdline-tools/* cmdline-tools/latest/
           rm -rf cmdline-tools-temp
 
-          # FIRST: Accept all licenses BEFORE installing anything
           yes | cmdline-tools/latest/bin/sdkmanager --licenses --sdk_root=$HOME/android-sdk
-
-          # Install required SDK components
           yes | cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/android-sdk "platform-tools"
           yes | cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/android-sdk "platforms;android-33"
-
-          # Install build-tools versions Buildozer may request
-          yes | cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/android-sdk "build-tools;33.0.2"
-          yes | cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/android-sdk "build-tools;36.0.0"
           yes | cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/android-sdk "build-tools;36.1.0"
+          yes | cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/android-sdk "ndk;25.2.9519653"
 
-      - name: Add Android config to buildozer.spec
+      - name: Force Buildozer to use external SDK
         run: |
           echo "[android]" > android_config.txt
           echo "sdk_dir = /home/runner/android-sdk" >> android_config.txt
@@ -68,9 +62,10 @@ jobs:
 
           cat android_config.txt >> buildozer.spec
 
-      - name: Remove Buildozer internal SDK
+      - name: DELETE Buildozer internal SDK BEFORE build
         run: |
           rm -rf /home/runner/.buildozer/android/platform/android-sdk
+          rm -rf /home/runner/.buildozer/android/platform/android-ndk*
 
       - name: Build APK
         run: |
@@ -81,4 +76,3 @@ jobs:
         with:
           name: ArtCrawler-APK
           path: bin/*.apk
-
