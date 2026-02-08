@@ -43,12 +43,17 @@ jobs:
           mv cmdline-tools-temp/cmdline-tools/* cmdline-tools/latest/
           rm -rf cmdline-tools-temp
 
+          # Accept all licenses BEFORE installing build-tools
+          yes | cmdline-tools/latest/bin/sdkmanager --licenses --sdk_root=$HOME/android-sdk
+
+          # Install required SDK components
           yes | cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/android-sdk "platform-tools"
           yes | cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/android-sdk "platforms;android-33"
+
+          # Install build-tools versions Buildozer may request
           yes | cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/android-sdk "build-tools;33.0.2"
           yes | cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/android-sdk "build-tools;36.0.0"
           yes | cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/android-sdk "build-tools;36.1.0"
-          yes | cmdline-tools/latest/bin/sdkmanager --licenses --sdk_root=$HOME/android-sdk
 
       - name: Add Android config to buildozer.spec
         run: |
@@ -74,6 +79,9 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
+          name: ArtCrawler-APK
+          path: bin/*.apk
+
           name: ArtCrawler-APK
           path: bin/*.apk
 
