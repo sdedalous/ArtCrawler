@@ -43,7 +43,7 @@ jobs:
           mv cmdline-tools-temp/cmdline-tools/* cmdline-tools/latest/
           rm -rf cmdline-tools-temp
 
-          # Accept all licenses BEFORE installing build-tools
+          # FIRST: Accept all licenses BEFORE installing anything
           yes | cmdline-tools/latest/bin/sdkmanager --licenses --sdk_root=$HOME/android-sdk
 
           # Install required SDK components
@@ -81,3 +81,4 @@ jobs:
         with:
           name: ArtCrawler-APK
           path: bin/*.apk
+
