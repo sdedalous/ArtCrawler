@@ -2,7 +2,7 @@ name: Build APK
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   workflow_dispatch:
 
 jobs:
@@ -16,36 +16,36 @@ jobs:
       ANDROIDMINAPI: 21
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: "3.10"
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
 
-    - name: Install dependencies
-      run: |
-        sudo apt update
-        sudo apt install -y python3-pip python3-setuptools python3-wheel git zip
-        pip install --upgrade pip
-        pip install buildozer cython
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y python3-pip python3-setuptools python3-wheel git zip
+          pip install --upgrade pip
+          pip install buildozer cython
 
-    - name: Install Android SDK/NDK
-      run: |
-        sudo apt install -y openjdk-17-jdk unzip
-        mkdir -p $HOME/android-sdk
-        cd $HOME/android-sdk
-        wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O cmdtools.zip
-        unzip cmdtools.zip -d cmdline-tools-temp
-        mkdir -p cmdline-tools/latest
-        mv cmdline-tools-temp/cmdline-tools/* cmdline-tools/latest/
-        rm -rf cmdline-tools-temp
-        yes | cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/android-sdk "platform-tools" "platforms;android-33" "build-tools;33.0.2"
+      - name: Install Android SDK/NDK
+        run: |
+          sudo apt install -y openjdk-17-jdk unzip
+          mkdir -p $HOME/android-sdk
+          cd $HOME/android-sdk
+          wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O cmdtools.zip
+          unzip cmdtools.zip -d cmdline-tools-temp
+          mkdir -p cmdline-tools/latest
+          mv cmdline-tools-temp/cmdline-tools/* cmdline-tools/latest/
+          rm -rf cmdline-tools-temp
+          yes | cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/android-sdk "platform-tools" "platforms;android-33" "build-tools;33.0.2"
 
-    - name: Add Android config to buildozer.spec
-      run: |
-        cat >> buildozer.spec << 'EOF'
+      - name: Add Android config to buildozer.spec
+        run: |
+          cat >> buildozer.spec << 'EOF'
 [android]
 sdk_dir = /home/runner/android-sdk
 ndk_dir = /home/runner/android-sdk/ndk-bundle
@@ -54,16 +54,16 @@ android_minapi = 21
 use_android_sdk = True
 EOF
 
-    - name: Remove Buildozer internal SDK
-      run: |
-        rm -rf /home/runner/.buildozer/android/platform/android-sdk
+      - name: Remove Buildozer internal SDK
+        run: |
+          rm -rf /home/runner/.buildozer/android/platform/android-sdk
 
-    - name: Build APK
-      run: |
-        buildozer android debug
+      - name: Build APK
+        run: |
+          buildozer android debug
 
-    - name: Upload APK
-      uses: actions/upload-artifact@v4
-      with:
-        name: ArtCrawler-APK
-        path: bin/*.apk
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: ArtCrawler-APK
+          path: bin/*.apk
