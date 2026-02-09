@@ -10,8 +10,8 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      ANDROIDSDK: $HOME/android-sdk
-      ANDROIDNDK: $HOME/android-sdk/ndk-bundle
+      ANDROIDSDK: /home/runner/android-sdk
+      ANDROIDNDK: /home/runner/android-sdk/ndk-bundle
       ANDROIDAPI: 33
       ANDROIDMINAPI: 21
 
@@ -34,8 +34,8 @@ jobs:
       - name: Install Android SDK/NDK
         run: |
           sudo apt install -y openjdk-17-jdk unzip
-          mkdir -p $HOME/android-sdk
-          cd $HOME/android-sdk
+          mkdir -p /home/runner/android-sdk
+          cd /home/runner/android-sdk
 
           wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O cmdtools.zip
           unzip cmdtools.zip -d cmdline-tools-temp
@@ -43,15 +43,15 @@ jobs:
           mv cmdline-tools-temp/cmdline-tools/* cmdline-tools/latest/
           rm -rf cmdline-tools-temp
 
-          yes | cmdline-tools/latest/bin/sdkmanager --licenses --sdk_root=$HOME/android-sdk
-          yes | cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/android-sdk "platform-tools"
-          yes | cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/android-sdk "platforms;android-33"
-          yes | cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/android-sdk "build-tools;36.1.0"
-          yes | cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/android-sdk "ndk;25.2.9519653"
+          yes | cmdline-tools/latest/bin/sdkmanager --licenses --sdk_root=/home/runner/android-sdk
+          yes | cmdline-tools/latest/bin/sdkmanager --sdk_root=/home/runner/android-sdk "platform-tools"
+          yes | cmdline-tools/latest/bin/sdkmanager --sdk_root=/home/runner/android-sdk "platforms;android-33"
+          yes | cmdline-tools/latest/bin/sdkmanager --sdk_root=/home/runner/android-sdk "build-tools;36.1.0"
+          yes | cmdline-tools/latest/bin/sdkmanager --sdk_root=/home/runner/android-sdk "ndk;25.2.9519653"
 
-          # FIX: Buildozer expects old sdkmanager path, so create a symlink
-          mkdir -p $HOME/android-sdk/tools/bin
-          ln -s $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager $HOME/android-sdk/tools/bin/sdkmanager
+          # FIX: Buildozer expects old sdkmanager path, so create a symlink using ABSOLUTE PATHS
+          mkdir -p /home/runner/android-sdk/tools/bin
+          ln -sf /home/runner/android-sdk/cmdline-tools/latest/bin/sdkmanager /home/runner/android-sdk/tools/bin/sdkmanager
 
       - name: Overwrite buildozer.spec
         run: |
