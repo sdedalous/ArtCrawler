@@ -49,23 +49,39 @@ jobs:
           yes | cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/android-sdk "build-tools;36.1.0"
           yes | cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/android-sdk "ndk;25.2.9519653"
 
-      - name: Force Buildozer to use external SDK
-        run: |
-          echo "[android]" > android_config.txt
-          echo "sdk_dir = /home/runner/android-sdk" >> android_config.txt
-          echo "ndk_dir = /home/runner/android-sdk/ndk-bundle" >> android_config.txt
-          echo "android_api = 33" >> android_config.txt
-          echo "android_minapi = 21" >> android_config.txt
-          echo "use_android_sdk = True" >> android_config.txt
-          echo "android.accept_sdk_license = True" >> android_config.txt
-          echo "android.build_tools_version = 36.1.0" >> android_config.txt
+          # FIX: Buildozer expects old sdkmanager path, so create a symlink
+          mkdir -p $HOME/android-sdk/tools/bin
+          ln -s $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager $HOME/android-sdk/tools/bin/sdkmanager
 
-          cat android_config.txt >> buildozer.spec
-
-      - name: DELETE Buildozer internal SDK BEFORE build
+      - name: Overwrite buildozer.spec
         run: |
-          rm -rf /home/runner/.buildozer/android/platform/android-sdk
-          rm -rf /home/runner/.buildozer/android/platform/android-ndk*
+          cat > buildozer.spec << 'EOF'
+[app]
+title = ArtCrawler
+package.name = artcrawler
+package.domain = org.art
+source.dir = .
+source.main = main.py
+version = 1.0.0
+requirements = python3,kivy
+orientation = portrait
+fullscreen = 0
+android.permissions = INTERNET,WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE,FOREGROUND_SERVICE
+android.enable_foreground_service = 1
+services = artcrawler.service.py
+
+use_android_sdk = True
+android.sdk_path = /home/runner/android-sdk
+android.ndk_path = /home/runner/android-sdk/ndk-bundle
+android.api = 33
+android.minapi = 21
+android.build_tools_version = 36.1.0
+android.accept_sdk_license = True
+android.archs = arm64-v8a,armeabi-v7a
+android.skip_update = True
+p4a.branch = master
+log_level = 2
+EOF
 
       - name: Build APK
         run: |
