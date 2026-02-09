@@ -76,5 +76,3 @@ jobs:
         with:
           name: ArtCrawler-APK
           path: bin/*.apk
-ArtCrawler-APK
-          path: bin/*.apk
