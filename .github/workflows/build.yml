@@ -45,12 +45,17 @@ jobs:
           mv cmdline-tools-temp/cmdline-tools/* cmdline-tools/latest/
           rm -rf cmdline-tools-temp
 
-          yes | cmdline-tools/latest/bin/sdkmanager --licenses --sdk_root=/home/runner/android-sdk
+          # Accept licenses BEFORE installing packages (critical)
+          yes | cmdline-tools/latest/bin/sdkmanager --licenses --sdk_root=/home/runner/android-sdk || true
+          yes | cmdline-tools/latest/bin/sdkmanager --licenses --sdk_root=/home/runner/android-sdk || true
+
+          # Install required packages
           yes | cmdline-tools/latest/bin/sdkmanager --sdk_root=/home/runner/android-sdk "platform-tools"
           yes | cmdline-tools/latest/bin/sdkmanager --sdk_root=/home/runner/android-sdk "platforms;android-33"
-          yes | cmdline-tools/latest/bin/sdkmanager --sdk_root=/home/runner/android-sdk "build-tools;36.1.0"
+          yes | cmdline-tools/latest/bin/sdkmanager --sdk_root=/home/runner/android-sdk "build-tools;35.0.0"
           yes | cmdline-tools/latest/bin/sdkmanager --sdk_root=/home/runner/android-sdk "ndk;25.2.9519653"
 
+          # Ensure sdkmanager is available in the expected path
           mkdir -p /home/runner/android-sdk/tools/bin
           ln -sf /home/runner/android-sdk/cmdline-tools/latest/bin/sdkmanager /home/runner/android-sdk/tools/bin/sdkmanager
 
@@ -82,7 +87,7 @@ jobs:
           "android.ndk_path = /home/runner/android-sdk/ndk-bundle" \
           "android.api = 33" \
           "android.minapi = 21" \
-          "android.build_tools_version = 36.1.0" \
+          "android.build_tools_version = 35.0.0" \
           "android.accept_sdk_license = True" \
           "android.archs = arm64-v8a,armeabi-v7a" \
           "android.skip_update = True" \
