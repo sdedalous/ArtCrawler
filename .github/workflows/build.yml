@@ -31,7 +31,7 @@ jobs:
             python3-pip python3-setuptools python3-wheel \
             git zip autoconf automake libtool libltdl-dev
           pip install --upgrade pip
-          pip install buildozer cython
+          pip install "cython<3.0.0" buildozer
 
       - name: Install Android SDK/NDK
         run: |
