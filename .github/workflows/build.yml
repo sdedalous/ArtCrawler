@@ -55,33 +55,33 @@ jobs:
 
       - name: Overwrite buildozer.spec
         run: |
-          cat > buildozer.spec << 'EOF'
-[app]
-title = ArtCrawler
-package.name = artcrawler
-package.domain = org.art
-source.dir = .
-source.main = main.py
-version = 1.0.0
-requirements = python3,kivy
-orientation = portrait
-fullscreen = 0
-android.permissions = INTERNET,WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE,FOREGROUND_SERVICE
-android.enable_foreground_service = 1
-services = artcrawler.service.py
-
-use_android_sdk = True
-android.sdk_path = /home/runner/android-sdk
-android.ndk_path = /home/runner/android-sdk/ndk-bundle
-android.api = 33
-android.minapi = 21
-android.build_tools_version = 36.1.0
-android.accept_sdk_license = True
-android.archs = arm64-v8a,armeabi-v7a
-android.skip_update = True
-p4a.branch = master
-log_level = 2
-EOF
+          printf "%s\n" \
+          "[app]" \
+          "title = ArtCrawler" \
+          "package.name = artcrawler" \
+          "package.domain = org.art" \
+          "source.dir = ." \
+          "source.main = main.py" \
+          "version = 1.0.0" \
+          "requirements = python3,kivy" \
+          "orientation = portrait" \
+          "fullscreen = 0" \
+          "android.permissions = INTERNET,WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE,FOREGROUND_SERVICE" \
+          "android.enable_foreground_service = 1" \
+          "services = artcrawler.service.py" \
+          "" \
+          "use_android_sdk = True" \
+          "android.sdk_path = /home/runner/android-sdk" \
+          "android.ndk_path = /home/runner/android-sdk/ndk-bundle" \
+          "android.api = 33" \
+          "android.minapi = 21" \
+          "android.build_tools_version = 36.1.0" \
+          "android.accept_sdk_license = True" \
+          "android.archs = arm64-v8a,armeabi-v7a" \
+          "android.skip_update = True" \
+          "p4a.branch = master" \
+          "log_level = 2" \
+          > buildozer.spec
 
       - name: Build APK
         run: |
