@@ -69,7 +69,7 @@ jobs:
           "fullscreen = 0" \
           "android.permissions = INTERNET,WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE,FOREGROUND_SERVICE" \
           "android.enable_foreground_service = 1" \
-          "services = artcrawler.service.py" \
+          "services = artcrawler" \
           "" \
           "use_android_sdk = True" \
           "android.sdk_path = /home/runner/android-sdk" \
