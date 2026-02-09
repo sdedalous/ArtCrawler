@@ -33,23 +33,24 @@ jobs:
           pip install --upgrade pip
           pip install "cython<3.0.0" buildozer
 
-      - name: Install Android SDK/NDK
+      - name: Install Android SDK/NDK (Locked Toolchain)
         run: |
           sudo apt install -y openjdk-17-jdk unzip
           mkdir -p /home/runner/android-sdk
           cd /home/runner/android-sdk
 
+          # Install command-line tools
           wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O cmdtools.zip
           unzip cmdtools.zip -d cmdline-tools-temp
           mkdir -p cmdline-tools/latest
           mv cmdline-tools-temp/cmdline-tools/* cmdline-tools/latest/
           rm -rf cmdline-tools-temp
 
-          # Accept licenses BEFORE installing packages (critical)
+          # Accept licenses BEFORE installing packages
           yes | cmdline-tools/latest/bin/sdkmanager --licenses --sdk_root=/home/runner/android-sdk || true
           yes | cmdline-tools/latest/bin/sdkmanager --licenses --sdk_root=/home/runner/android-sdk || true
 
-          # Install required packages
+          # Install locked versions
           yes | cmdline-tools/latest/bin/sdkmanager --sdk_root=/home/runner/android-sdk "platform-tools"
           yes | cmdline-tools/latest/bin/sdkmanager --sdk_root=/home/runner/android-sdk "platforms;android-33"
           yes | cmdline-tools/latest/bin/sdkmanager --sdk_root=/home/runner/android-sdk "build-tools;35.0.0"
@@ -59,7 +60,7 @@ jobs:
           mkdir -p /home/runner/android-sdk/tools/bin
           ln -sf /home/runner/android-sdk/cmdline-tools/latest/bin/sdkmanager /home/runner/android-sdk/tools/bin/sdkmanager
 
-      - name: Overwrite buildozer.spec
+      - name: Overwrite buildozer.spec (Locked Toolchain)
         run: |
           printf "%s\n" \
           "[app]" \
@@ -91,7 +92,8 @@ jobs:
           "android.accept_sdk_license = True" \
           "android.archs = arm64-v8a,armeabi-v7a" \
           "android.skip_update = True" \
-          "p4a.branch = master" \
+          "p4a.branch = develop" \
+          "p4a.commit = 7d5e6e3" \
           > buildozer.spec
 
       - name: Build APK
