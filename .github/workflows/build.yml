@@ -9,12 +9,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    env:
-      ANDROIDSDK: /home/runner/android-sdk
-      ANDROIDNDK: /home/runner/android-sdk/ndk/25.2.9519653
-      ANDROIDAPI: 33
-      ANDROIDMINAPI: 21
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -29,80 +23,27 @@ jobs:
           sudo apt update
           sudo apt install -y \
             python3-pip python3-setuptools python3-wheel \
-            git zip autoconf automake libtool libltdl-dev
+            git zip autoconf automake libtool libltdl-dev openjdk-17-jdk
           pip install --upgrade pip
           pip install "cython<3.0.0" buildozer
 
-      - name: Install Android SDK/NDK (External Toolchain)
+      - name: Build once to trigger SDK/NDK download
         run: |
-          sudo apt install -y openjdk-17-jdk unzip
-          mkdir -p /home/runner/android-sdk
-          cd /home/runner/android-sdk
+          buildozer android debug || true
 
-          wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O cmdtools.zip
-          unzip cmdtools.zip -d cmdline-tools-temp
-          mkdir -p cmdline-tools/latest
-          mv cmdline-tools-temp/cmdline-tools/* cmdline-tools/latest/
-          rm -rf cmdline-tools-temp
-
-          yes | cmdline-tools/latest/bin/sdkmanager --licenses --sdk_root=/home/runner/android-sdk || true
-
-          yes | cmdline-tools/latest/bin/sdkmanager --sdk_root=/home/runner/android-sdk "platform-tools"
-          yes | cmdline-tools/latest/bin/sdkmanager --sdk_root=/home/runner/android-sdk "platforms;android-33"
-          yes | cmdline-tools/latest/bin/sdkmanager --sdk_root=/home/runner/android-sdk "build-tools;35.0.0"
-          yes | cmdline-tools/latest/bin/sdkmanager --sdk_root=/home/runner/android-sdk "ndk;25.2.9519653"
-
-          mkdir -p /home/runner/android-sdk/tools/bin
-          ln -sf /home/runner/android-sdk/cmdline-tools/latest/bin/sdkmanager /home/runner/android-sdk/tools/bin/sdkmanager
-
-      - name: Overwrite buildozer.spec
+      - name: Accept licenses inside Buildozer internal SDK
         run: |
-          printf "%s\n" \
-          "[app]" \
-          "title = ArtCrawler" \
-          "package.name = artcrawler" \
-          "package.domain = org.art" \
-          "source.dir = ." \
-          "source.main = main.py" \
-          "version = 1.0.0" \
-          "requirements = python3,kivy" \
-          "orientation = portrait" \
-          "fullscreen = 0" \
-          "android.permissions = INTERNET,WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE,FOREGROUND_SERVICE" \
-          "android.enable_foreground_service = 1" \
-          "" \
-          "[buildozer]" \
-          "log_level = 2" \
-          "warn_on_root = 0" \
-          "" \
-          "[android]" \
-          "use_android_sdk = True" \
-          "android.sdk = /home/runner/android-sdk" \
-          "android.sdk_path = /home/runner/android-sdk" \
-          "android.ndk_path = /home/runner/android-sdk/ndk/25.2.9519653" \
-          "android.api = 33" \
-          "android.minapi = 21" \
-          "android.build_tools_version = 35.0.0" \
-          "android.accept_sdk_license = True" \
-          "android.archs = arm64-v8a,armeabi-v7a" \
-          "android.skip_update = True" \
-          "p4a.branch = stable" \
-          > buildozer.spec
+          INTERNAL_SDK=~/.buildozer/android/platform/android-sdk
+          yes | $INTERNAL_SDK/cmdline-tools/latest/bin/sdkmanager --licenses --sdk_root=$INTERNAL_SDK || true
 
-      - name: Remove Buildozer internal SDK (force external SDK)
+      - name: Install required build-tools inside internal SDK
         run: |
-          rm -rf ~/.buildozer/android/platform/android-sdk
+          INTERNAL_SDK=~/.buildozer/android/platform/android-sdk
+          yes | $INTERNAL_SDK/cmdline-tools/latest/bin/sdkmanager --sdk_root=$INTERNAL_SDK "build-tools;35.0.0"
+          yes | $INTERNAL_SDK/cmdline-tools/latest/bin/sdkmanager --sdk_root=$INTERNAL_SDK "platforms;android-33"
 
-      - name: Build APK (forced external SDK)
+      - name: Final Build
         run: |
-          export ANDROIDSDK=/home/runner/android-sdk
-          export ANDROIDNDK=/home/runner/android-sdk/ndk/25.2.9519653
-          export ANDROIDAPI=33
-          export ANDROIDMINAPI=21
-          export PATH=$ANDROIDSDK/tools/bin:$PATH
-          export PATH=$ANDROIDSDK/platform-tools:$PATH
-          export PATH=$ANDROIDSDK/build-tools/35.0.0:$PATH
-
           buildozer android debug
 
       - name: Upload APK
