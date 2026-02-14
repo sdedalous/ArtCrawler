@@ -11,7 +11,7 @@ jobs:
 
     env:
       ANDROIDSDK: /home/runner/android-sdk
-      ANDROIDNDK: /home/runner/android-sdk/ndk-bundle
+      ANDROIDNDK: /home/runner/android-sdk/ndk/25.2.9519653
       ANDROIDAPI: 33
       ANDROIDMINAPI: 21
 
@@ -47,7 +47,6 @@ jobs:
           rm -rf cmdline-tools-temp
 
           # Accept licenses BEFORE installing packages
-          yes | cmdline-tools/latest/bin/sdkmanager --licenses --sdk_root=/home/runner/android-sdk || true
           yes | cmdline-tools/latest/bin/sdkmanager --licenses --sdk_root=/home/runner/android-sdk || true
 
           # Install locked versions
@@ -85,7 +84,7 @@ jobs:
           "[android]" \
           "use_android_sdk = True" \
           "android.sdk_path = /home/runner/android-sdk" \
-          "android.ndk_path = /home/runner/android-sdk/ndk-bundle" \
+          "android.ndk_path = /home/runner/android-sdk/ndk/25.2.9519653" \
           "android.api = 33" \
           "android.minapi = 21" \
           "android.build_tools_version = 35.0.0" \
@@ -95,6 +94,12 @@ jobs:
           "p4a.branch = develop" \
           "p4a.commit = 7d5e6e3" \
           > buildozer.spec
+
+      - name: Accept licenses in Buildozer SDK (safety net)
+        run: |
+          if [ -d ~/.buildozer/android/platform/android-sdk ]; then
+            yes | ~/.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses --sdk_root=~/.buildozer/android/platform/android-sdk || true
+          fi
 
       - name: Build APK
         run: |
