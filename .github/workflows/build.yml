@@ -9,6 +9,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      ANDROIDSDK: /home/runner/android-sdk
+      ANDROIDNDK: /home/runner/android-sdk/ndk/25.2.9519653
+      ANDROIDAPI: 33
+      ANDROIDMINAPI: 21
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -27,15 +33,15 @@ jobs:
           pip install --upgrade pip
           pip install "cython<3.0.0" buildozer
 
-      - name: First build to trigger internal SDK/NDK download
+      - name: First build to let Buildozer initialize external SDK
         run: |
           buildozer android debug || true
 
-      - name: Install cmdline-tools inside internal SDK
+      - name: Install cmdline-tools into external SDK
         run: |
-          INTERNAL_SDK="$HOME/.buildozer/android/platform/android-sdk"
-          mkdir -p "$INTERNAL_SDK/cmdline-tools"
-          cd "$INTERNAL_SDK"
+          SDK=/home/runner/android-sdk
+          mkdir -p "$SDK/cmdline-tools"
+          cd "$SDK"
 
           wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O cmdtools.zip
           unzip cmdtools.zip -d cmdline-tools-temp
@@ -43,16 +49,16 @@ jobs:
           mv cmdline-tools-temp/cmdline-tools/* cmdline-tools/latest/
           rm -rf cmdline-tools-temp cmdtools.zip
 
-      - name: Accept licenses inside internal SDK
+      - name: Accept licenses in external SDK
         run: |
-          INTERNAL_SDK="$HOME/.buildozer/android/platform/android-sdk"
-          yes | "$INTERNAL_SDK/cmdline-tools/latest/bin/sdkmanager" --licenses --sdk_root="$INTERNAL_SDK" || true
+          SDK=/home/runner/android-sdk
+          yes | "$SDK/cmdline-tools/latest/bin/sdkmanager" --licenses --sdk_root="$SDK" || true
 
-      - name: Install required build-tools and platforms inside internal SDK
+      - name: Install build-tools and platforms into external SDK
         run: |
-          INTERNAL_SDK="$HOME/.buildozer/android/platform/android-sdk"
-          yes | "$INTERNAL_SDK/cmdline-tools/latest/bin/sdkmanager" --sdk_root="$INTERNAL_SDK" "build-tools;35.0.0"
-          yes | "$INTERNAL_SDK/cmdline-tools/latest/bin/sdkmanager" --sdk_root="$INTERNAL_SDK" "platforms;android-33"
+          SDK=/home/runner/android-sdk
+          yes | "$SDK/cmdline-tools/latest/bin/sdkmanager" --sdk_root="$SDK" "build-tools;35.0.0"
+          yes | "$SDK/cmdline-tools/latest/bin/sdkmanager" --sdk_root="$SDK" "platforms;android-33"
 
       - name: Final Build
         run: |
