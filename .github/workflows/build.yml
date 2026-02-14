@@ -19,6 +19,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Remove system Android SDK/NDK (forces clean environment)
+        run: |
+          sudo rm -rf /usr/local/lib/android/sdk || true
+          unset ANDROID_HOME
+          unset ANDROID_SDK_ROOT
+          unset ANDROID_NDK
+          unset ANDROID_NDK_HOME
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
