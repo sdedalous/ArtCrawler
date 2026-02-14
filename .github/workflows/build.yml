@@ -23,24 +23,36 @@ jobs:
           sudo apt update
           sudo apt install -y \
             python3-pip python3-setuptools python3-wheel \
-            git zip autoconf automake libtool libltdl-dev openjdk-17-jdk
+            git zip autoconf automake libtool libltdl-dev openjdk-17-jdk unzip
           pip install --upgrade pip
           pip install "cython<3.0.0" buildozer
 
-      - name: Build once to trigger SDK/NDK download
+      - name: First build to trigger internal SDK/NDK download
         run: |
           buildozer android debug || true
 
-      - name: Accept licenses inside Buildozer internal SDK
+      - name: Install cmdline-tools inside internal SDK
         run: |
-          INTERNAL_SDK=~/.buildozer/android/platform/android-sdk
-          yes | $INTERNAL_SDK/cmdline-tools/latest/bin/sdkmanager --licenses --sdk_root=$INTERNAL_SDK || true
+          INTERNAL_SDK="$HOME/.buildozer/android/platform/android-sdk"
+          mkdir -p "$INTERNAL_SDK/cmdline-tools"
+          cd "$INTERNAL_SDK"
 
-      - name: Install required build-tools inside internal SDK
+          wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O cmdtools.zip
+          unzip cmdtools.zip -d cmdline-tools-temp
+          mkdir -p cmdline-tools/latest
+          mv cmdline-tools-temp/cmdline-tools/* cmdline-tools/latest/
+          rm -rf cmdline-tools-temp cmdtools.zip
+
+      - name: Accept licenses inside internal SDK
         run: |
-          INTERNAL_SDK=~/.buildozer/android/platform/android-sdk
-          yes | $INTERNAL_SDK/cmdline-tools/latest/bin/sdkmanager --sdk_root=$INTERNAL_SDK "build-tools;35.0.0"
-          yes | $INTERNAL_SDK/cmdline-tools/latest/bin/sdkmanager --sdk_root=$INTERNAL_SDK "platforms;android-33"
+          INTERNAL_SDK="$HOME/.buildozer/android/platform/android-sdk"
+          yes | "$INTERNAL_SDK/cmdline-tools/latest/bin/sdkmanager" --licenses --sdk_root="$INTERNAL_SDK" || true
+
+      - name: Install required build-tools and platforms inside internal SDK
+        run: |
+          INTERNAL_SDK="$HOME/.buildozer/android/platform/android-sdk"
+          yes | "$INTERNAL_SDK/cmdline-tools/latest/bin/sdkmanager" --sdk_root="$INTERNAL_SDK" "build-tools;35.0.0"
+          yes | "$INTERNAL_SDK/cmdline-tools/latest/bin/sdkmanager" --sdk_root="$INTERNAL_SDK" "platforms;android-33"
 
       - name: Final Build
         run: |
