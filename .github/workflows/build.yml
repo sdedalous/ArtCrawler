@@ -96,14 +96,16 @@ jobs:
           "p4a.commit = 7d5e6e3" \
           > buildozer.spec
 
-      - name: Accept licenses in Buildozer SDK (safety net)
+      - name: Build APK (FORCED SDK OVERRIDE)
         run: |
-          if [ -d ~/.buildozer/android/platform/android-sdk ]; then
-            yes | ~/.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses --sdk_root=~/.buildozer/android/platform/android-sdk || true
-          fi
+          export ANDROIDSDK=/home/runner/android-sdk
+          export ANDROIDNDK=/home/runner/android-sdk/ndk/25.2.9519653
+          export ANDROIDAPI=33
+          export ANDROIDMINAPI=21
+          export PATH=$ANDROIDSDK/tools/bin:$PATH
+          export PATH=$ANDROIDSDK/platform-tools:$PATH
+          export PATH=$ANDROIDSDK/build-tools/35.0.0:$PATH
 
-      - name: Build APK
-        run: |
           buildozer android debug
 
       - name: Upload APK
