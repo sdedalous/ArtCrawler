@@ -33,7 +33,7 @@ jobs:
           pip install --upgrade pip
           pip install "cython<3.0.0" buildozer
 
-      - name: Install Android SDK/NDK (Locked Toolchain)
+      - name: Install Android SDK/NDK (External Toolchain)
         run: |
           sudo apt install -y openjdk-17-jdk unzip
           mkdir -p /home/runner/android-sdk
@@ -55,7 +55,7 @@ jobs:
           mkdir -p /home/runner/android-sdk/tools/bin
           ln -sf /home/runner/android-sdk/cmdline-tools/latest/bin/sdkmanager /home/runner/android-sdk/tools/bin/sdkmanager
 
-      - name: Overwrite buildozer.spec (Locked Toolchain)
+      - name: Overwrite buildozer.spec
         run: |
           printf "%s\n" \
           "[app]" \
@@ -70,8 +70,6 @@ jobs:
           "fullscreen = 0" \
           "android.permissions = INTERNET,WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE,FOREGROUND_SERVICE" \
           "android.enable_foreground_service = 1" \
-          "services = artcrawler" \
-          "service.artcrawler = artcrawler.service:main" \
           "" \
           "[buildozer]" \
           "log_level = 2" \
@@ -91,11 +89,11 @@ jobs:
           "p4a.branch = stable" \
           > buildozer.spec
 
-      - name: Remove Buildozer internal SDK (forces external SDK usage)
+      - name: Remove Buildozer internal SDK (force external SDK)
         run: |
           rm -rf ~/.buildozer/android/platform/android-sdk
 
-      - name: Build APK (FORCED SDK OVERRIDE)
+      - name: Build APK (forced external SDK)
         run: |
           export ANDROIDSDK=/home/runner/android-sdk
           export ANDROIDNDK=/home/runner/android-sdk/ndk/25.2.9519653
