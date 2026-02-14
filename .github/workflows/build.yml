@@ -9,23 +9,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    env:
-      ANDROIDSDK: /home/runner/android-sdk
-      ANDROIDNDK: /home/runner/android-sdk/ndk/25.2.9519653
-      ANDROIDAPI: 33
-      ANDROIDMINAPI: 21
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: Remove system Android SDK/NDK (forces clean environment)
-        run: |
-          sudo rm -rf /usr/local/lib/android/sdk || true
-          unset ANDROID_HOME
-          unset ANDROID_SDK_ROOT
-          unset ANDROID_NDK
-          unset ANDROID_NDK_HOME
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -68,8 +54,17 @@ jobs:
           yes | "$SDK/cmdline-tools/latest/bin/sdkmanager" --sdk_root="$SDK" "build-tools;35.0.0"
           yes | "$SDK/cmdline-tools/latest/bin/sdkmanager" --sdk_root="$SDK" "platforms;android-33"
 
-      - name: Final Build
+      - name: Final Build (override system SDK variables)
         run: |
+          export ANDROID_HOME=/home/runner/android-sdk
+          export ANDROID_SDK_ROOT=/home/runner/android-sdk
+          export ANDROID_NDK_HOME=/home/runner/android-sdk/ndk/25.2.9519653
+          export ANDROID_NDK=/home/runner/android-sdk/ndk/25.2.9519653
+
+          export PATH=/home/runner/android-sdk/build-tools/35.0.0:$PATH
+          export PATH=/home/runner/android-sdk/platform-tools:$PATH
+          export PATH=/home/runner/android-sdk/cmdline-tools/latest/bin:$PATH
+
           buildozer android debug
 
       - name: Upload APK
