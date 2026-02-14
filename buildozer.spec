@@ -2,7 +2,7 @@
 title = ArtCrawler
 package.name = artcrawler
 package.domain = org.art
-source.dir = .
+source.dir = ArtCrawler
 source.main = main.py
 version = 1.0.0
 requirements = python3,kivy
@@ -22,7 +22,7 @@ android.ndk_path = /home/runner/android-sdk/ndk-bundle
 # Pin versions to avoid Buildozer auto-installing broken ones
 android.api = 33
 android.minapi = 21
-android.build_tools_version = 36.1.0
+android.build_tools_version = 35.0.0
 
 # Accept licenses automatically
 android.accept_sdk_license = True
