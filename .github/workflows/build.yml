@@ -9,6 +9,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        shell: bash
+        working-directory: ${{ github.workspace }}/..
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -20,6 +25,13 @@ jobs:
             mv ArtCrawler/* .
             rm -rf ArtCrawler
           fi
+
+      - name: Confirm working directory
+        run: |
+          echo "Current directory:"
+          pwd
+          echo "Contents:"
+          ls -la
 
       - name: Set up Python
         uses: actions/setup-python@v4
