@@ -83,6 +83,7 @@ jobs:
           "" \
           "[android]" \
           "use_android_sdk = True" \
+          "android.sdk = /home/runner/android-sdk" \
           "android.sdk_path = /home/runner/android-sdk" \
           "android.ndk_path = /home/runner/android-sdk/ndk/25.2.9519653" \
           "android.api = 33" \
