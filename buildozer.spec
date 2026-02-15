@@ -15,8 +15,8 @@ fullscreen = 0
 android.permissions = INTERNET,WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE,FOREGROUND_SERVICE
 android.enable_foreground_service = 1
 
-# Your service lives in artcrawler/service.py
-services = artcrawler
+# Service definition (single-line format avoids Buildozer parser bugs)
+services = artcrawler:artcrawler.service:main
 
 # Prevent Buildozer from downloading its own SDK/NDK
 use_android_sdk = True
@@ -47,6 +47,3 @@ android.skip_update = True
 
 # Avoid old toolchain
 p4a.branch = master
-
-# Service entry point
-service.artcrawler = artcrawler.service:main
