@@ -3,7 +3,7 @@ title = ArtCrawler
 package.name = artcrawler
 package.domain = org.art
 
-# Your app root is the repo root
+# App entry point
 source.dir = .
 source.main = main.py
 
@@ -12,22 +12,22 @@ requirements = python3,kivy
 orientation = portrait
 fullscreen = 0
 
-android.permissions = INTERNET,WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE,FOREGROUND_SERVICE
+# Permissions (Android 16 ignores old external storage permissions)
+android.permissions = INTERNET,FOREGROUND_SERVICE
 android.enable_foreground_service = 1
 
-# Service definition (single-line format avoids Buildozer parser bugs)
+# Service definition (single-line format avoids parser bugs)
 services = artcrawler:artcrawler.service:main
 
-# Prevent Buildozer from downloading its own SDK/NDK
+# Use the GitHub Actions SDK/NDK instead of Buildozer auto-download
 use_android_sdk = True
-
-# Force Buildozer to use the external SDK installed by GitHub Actions
 android.sdk_path = /home/runner/android-sdk
 android.ndk_path = /home/runner/android-sdk/ndk-bundle
 
-# Pin versions to avoid Buildozer auto-installing broken ones
-android.api = 33
-android.minapi = 21
+# Android 16 requires targetSdkVersion >= 34
+android.api = 34
+android.minapi = 23
+android.sdk = 34
 android.build_tools_version = 35.0.0
 
 # Accept licenses automatically
@@ -36,14 +36,10 @@ android.accept_sdk_license = True
 # Architectures
 android.archs = arm64-v8a,armeabi-v7a
 
-# Reduce build noise
+# Build options
 log_level = 2
-
-# Keep Python bytecode
 android.keep_python_bytecode = True
-
-# Disable internal downloads
 android.skip_update = True
 
-# Avoid old toolchain
+# Use modern python-for-android
 p4a.branch = master
