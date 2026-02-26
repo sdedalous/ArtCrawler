@@ -25,7 +25,7 @@ android.sdk_path = /home/runner/android-sdk
 android.ndk_path = /home/runner/android-sdk/ndk-bundle
 
 # Android 16 requires targetSdkVersion >= 34
-android.api = 34
+android.api = 33
 android.minapi = 23
 android.sdk = 34
 android.build_tools_version = 35.0.0
