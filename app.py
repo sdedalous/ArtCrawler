@@ -18,9 +18,6 @@ class HomeScreen(Screen):
     crawler_status_text = StringProperty("Crawler: idle")
     indexer_status_text = StringProperty("Indexer: idle")
 
-    # NEW: buffer for crawler logs
-    crawler_log_buffer = []
-
     last_offset = 0
 
     crawler_thread = None
@@ -112,18 +109,7 @@ class HomeScreen(Screen):
         self.status_text = "Stopping crawler..."
         Clock.unschedule(self.check_crawler_progress)
 
-    # -------------------------
-    # NEW: Append crawler logs instead of overwriting
-    # -------------------------
     def _set_crawler_status(self, msg):
-        # Append to buffer
-        self.crawler_log_buffer.append(msg)
-
-        # Keep last 500 lines to avoid memory bloat
-        if len(self.crawler_log_buffer) > 500:
-            self.crawler_log_buffer = self.crawler_log_buffer[-500:]
-
-        # Show latest line in UI
         self.crawler_status_text = msg
 
     # -------------------------
@@ -250,11 +236,12 @@ class LogScreen(Screen):
     def on_enter(self):
         self.load_logs()
 
-    # NEW: show crawler log buffer instead of failed_download.log
     def load_logs(self):
-        home = self.manager.get_screen("home")
-        text = "\n".join(home.crawler_log_buffer)
-        self.log_text = text if text else "No crawler logs yet."
+        try:
+            with open(LOG_PATH, "r") as f:
+                self.log_text = f.read()
+        except:
+            self.log_text = "No logs found."
 
 
 class RootManager(ScreenManager):
@@ -268,3 +255,4 @@ class ArtCrawlerApp(App):
 
 if __name__ == "__main__":
     ArtCrawlerApp().run()
+ỳlp

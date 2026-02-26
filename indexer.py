@@ -16,7 +16,8 @@ SPARQL_URL = "https://query.wikidata.org/sparql"
 YEAR_MIN = 1880
 YEAR_MAX = 2024
 
-BATCH_LIMIT = 120
+# Smaller batches = lighter queries = fewer timeouts
+BATCH_LIMIT = 60
 SLEEP_BETWEEN_BATCHES = 5
 
 HEADERS = {
@@ -25,46 +26,44 @@ HEADERS = {
 }
 
 CLASSES = [
-    ("painting", "wd:Q3305213"),
-    ("poster", "wd:Q429785"),
-    ("print", "wd:Q133492"),
-    ("digital_art", "wd:Q4502142"),
-    ("collage", "wd:Q838948"),
-    ("mixed_media", "wd:Q288465"),
-    ("2d_artwork", "wd:Q16686448"),
+    ("portrait", "wd:Q134307"),
 ]
 
 
-# ---------------------------------------------------------
-# Helper: safe UI callback
-# ---------------------------------------------------------
+
+
+
+
 def ui_log(msg, callback):
-    """
-    Sends a message to the UI if callback is provided,
-    otherwise prints to terminal.
-    """
     if callback:
         callback(msg)
     else:
         print(msg)
 
 
-# ---------------------------------------------------------
-# SPARQL query builder
-# ---------------------------------------------------------
 def build_query(class_qid, offset):
     return f"""
     SELECT ?item ?itemLabel ?image ?year WHERE {{
-      ?item wdt:P31 {class_qid} .
-      ?item wdt:P18 ?image .
+
+      # Portraits (genre = portrait)
+      ?item wdt:P136 wd:Q134307 .
+
+      # Any valid image property
+      ?item (wdt:P18|wdt:P4765|wdt:P6802|wdt:P7482) ?image .
+
+      # Must have a creation date (your DB requires this)
       ?item wdt:P571 ?date .
       BIND(YEAR(?date) AS ?year)
+
+      # Year range filter
       FILTER(?year >= {YEAR_MIN} && ?year <= {YEAR_MAX})
+
       SERVICE wikibase:label {{ bd:serviceParam wikibase:language "en". }}
     }}
     LIMIT {BATCH_LIMIT}
     OFFSET {offset}
     """
+
 
 
 def fetch_items(class_qid, offset):
@@ -73,7 +72,7 @@ def fetch_items(class_qid, offset):
         SPARQL_URL,
         params={"query": query},
         headers=HEADERS,
-        timeout=60
+        timeout=180  # was 60
     )
 
     if response.status_code != 200:
@@ -112,14 +111,7 @@ def insert_item(qid, year):
         conn.close()
 
 
-# ---------------------------------------------------------
-# MAIN INDEXER (now with callback)
-# ---------------------------------------------------------
 def run_indexer(progress_callback=None):
-    """
-    progress_callback(msg: str) will be called from Kivy thread via Clock.schedule_once.
-    If None, prints to terminal.
-    """
     init_db()
 
     classes_done = {name: False for name, _ in CLASSES}
@@ -149,7 +141,8 @@ def run_indexer(progress_callback=None):
                 consecutive_failures = 0
             except Exception as e:
                 consecutive_failures += 1
-                wait_time = min(60 * consecutive_failures, 300)
+                # cap backoff at 5 minutes, but start gentler
+                wait_time = min(30 * consecutive_failures, 300)
                 ui_log(f"[ERROR] Fetch error for {class_name} at offset {offset}: {e}", progress_callback)
                 ui_log(f"[INFO] Sleeping {wait_time}s before retry…", progress_callback)
                 time.sleep(wait_time)

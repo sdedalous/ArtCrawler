@@ -2,6 +2,7 @@ import os
 import time
 import socket
 import shutil
+import subprocess
 import requests
 from urllib.parse import quote
 import requests.packages.urllib3.util.connection as urllib3_cn
@@ -30,6 +31,7 @@ LOG_403 = f"{BASE_DIR}/failed_403.log"
 LOG_METADATA = f"{BASE_DIR}/failed_metadata.log"
 LOG_DOWNLOAD = f"{BASE_DIR}/failed_download.log"
 LOG_QUERY = f"{BASE_DIR}/failed_query.log"
+LOG_WIFI_HARD = f"{BASE_DIR}/failed_wifi_hard.log"
 
 SLEEP_BETWEEN_ITEMS = 2
 
@@ -87,7 +89,7 @@ def sleep_interruptible(seconds):
 # ---------------------------------------------------------
 # Thumbnail builder
 # ---------------------------------------------------------
-def build_thumbnail_url(filename, width=1500):
+def build_thumbnail_url(filename, width=2500):
     try:
         safe_name = quote(filename, safe="")
         return (
@@ -175,7 +177,20 @@ def safety_gate(callback):
     return True
 
 # ---------------------------------------------------------
-# Network helper
+# Wi-Fi detection (Termux)
+# ---------------------------------------------------------
+def wifi_on():
+    try:
+        out = subprocess.check_output(
+            ["termux-wifi-connectioninfo"],
+            stderr=subprocess.DEVNULL
+        ).decode("utf-8")
+        return '"state":"CONNECTED"' in out
+    except Exception:
+        return False
+
+# ---------------------------------------------------------
+# Network helper (unchanged retries, no per-request Wi-Fi logic)
 # ---------------------------------------------------------
 def safe_request(url, params, headers, callback, retries=5):
     delay = 2
@@ -193,59 +208,34 @@ def safe_request(url, params, headers, callback, retries=5):
             delay *= 2
     return None
 
-def on_wifi():
-    try:
-        from jnius import autoclass
-
-        Context = autoclass('android.content.Context')
-        PythonActivity = autoclass('org.kivy.android.PythonActivity')
-        ConnectivityManager = autoclass('android.net.ConnectivityManager')
-
-        activity = PythonActivity.mActivity
-        cm = activity.getSystemService(Context.CONNECTIVITY_SERVICE)
-        network = cm.getActiveNetworkInfo()
-
-        if network is None:
-            return False
-
-        return network.getType() == ConnectivityManager.TYPE_WIFI
-
-    except Exception:
-        return False
-
 # ---------------------------------------------------------
 # DB helpers
 # ---------------------------------------------------------
-def get_next_item():
+def get_next_item(wifi_retry_phase):
     conn = get_db()
     c = conn.cursor()
+
+    if wifi_retry_phase:
+        # Process Wi-Fi retry queue first (items that previously failed on bad network)
+        c.execute(
+            "SELECT qid, year FROM items "
+            "WHERE wifi_retry = 1 AND wifi_fail_count < 3 "
+            "LIMIT 1"
+        )
+        row = c.fetchone()
+        if row:
+            conn.close()
+            return row
+
+    # Normal queue: items never processed or newly indexed
     c.execute(
-        "SELECT qid, year "
-        "FROM items "
+        "SELECT qid, year FROM items "
         "WHERE done = 0 "
-        "  AND wifi_retry = 0 "
-        "ORDER BY rowid ASC "
         "LIMIT 1"
     )
     row = c.fetchone()
     conn.close()
     return row
-
-def get_next_wifi_retry_item():
-    conn = get_db()
-    c = conn.cursor()
-    c.execute(
-        "SELECT qid, year "
-        "FROM items "
-        "WHERE wifi_retry = 1 "
-        "  AND done = 0 "
-        "ORDER BY last_try ASC "
-        "LIMIT 1"
-    )
-    row = c.fetchone()
-    conn.close()
-    return row
-
 
 def mark_done(qid):
     conn = get_db()
@@ -254,71 +244,58 @@ def mark_done(qid):
     conn.commit()
     conn.close()
 
-
-# Called by the main crawler when a network-related failure happens.
-def record_soft_fail(qid, reason):
+def mark_success(qid):
     conn = get_db()
     c = conn.cursor()
-    c.execute(
-        "UPDATE items SET "
-        "wifi_retry = 1, "
-        "last_try = strftime('%s','now'), "
-        "last_fail_reason = ?, "
-        "wifi_fail_count = 0 "
-        "WHERE qid = ?",
-        (reason, qid)
-    )
+    c.execute("""
+        UPDATE items
+        SET done = 1,
+            wifi_retry = 0,
+            last_fail_reason = NULL
+        WHERE qid = ?
+    """, (qid,))
     conn.commit()
     conn.close()
 
-
-# Called when the item is fundamentally bad (404, missing data, etc.)
-def record_hard_fail(qid):
-    mark_done(qid)
-
-
-# Called by the Wi‑Fi retry crawler when a retry attempt fails.
-def record_wifi_retry_fail(qid, reason):
+def mark_wifi_failure(qid, reason):
     conn = get_db()
     c = conn.cursor()
 
-    c.execute(
-        "SELECT last_fail_reason, wifi_fail_count "
-        "FROM items WHERE qid = ?",
-        (qid,)
-    )
+    c.execute("SELECT wifi_fail_count FROM items WHERE qid = ?", (qid,))
     row = c.fetchone()
+    current = row[0] if row else 0
 
-    if row is None:
-        conn.close()
-        return
-
-    prev_reason, count = row
-
-    # Same failure reason again → give up immediately
-    if prev_reason == reason:
-        mark_done(qid)
-        conn.close()
-        return
-
-    # Different reason → increment retry count
-    count += 1
-
-    if count >= 2:
-        mark_done(qid)
+    if current < 2:
+        # Soft fail: keep for Wi-Fi retry
+        c.execute("""
+            UPDATE items
+            SET wifi_fail_count = wifi_fail_count + 1,
+                wifi_retry = 1,
+                last_fail_reason = ?,
+                last_try = strftime('%s','now'),
+                done = 0
+            WHERE qid = ?
+        """, (reason, qid))
     else:
-        c.execute(
-            "UPDATE items SET "
-            "wifi_fail_count = ?, "
-            "last_fail_reason = ?, "
-            "last_try = strftime('%s','now') "
-            "WHERE qid = ?",
-            (count, reason, qid)
-        )
-        conn.commit()
+        # Hard fail after 3 attempts
+        c.execute("""
+            UPDATE items
+            SET wifi_fail_count = wifi_fail_count + 1,
+                wifi_retry = 0,
+                last_fail_reason = ?,
+                last_try = strftime('%s','now'),
+                done = 1
+            WHERE qid = ?
+        """, (reason, qid))
 
+        try:
+            with open(LOG_WIFI_HARD, "a") as f:
+                f.write(f"{qid} | WIFI HARD FAIL | {reason}\n")
+        except Exception:
+            pass
+
+    conn.commit()
     conn.close()
-
 
 # ---------------------------------------------------------
 # Metadata fetch
@@ -410,7 +387,7 @@ def get_image_info(title, qid, callback):
                 return None
 
             full_url = ii.get("url")
-            thumb_url = build_thumbnail_url(title, width=1500)
+            thumb_url = build_thumbnail_url(title, width=2500)
 
             chosen_url = full_url
             if width > 1500 or height > 1500:
@@ -491,26 +468,75 @@ def download_image(url, qid, callback):
     return path
 
 # ---------------------------------------------------------
-# Stats
+# Improved Stats (Top Line)
 # ---------------------------------------------------------
 def print_stats(callback):
-    total = stats["downloaded"] + stats["failures"]
-    failure_rate = (
-        stats["failures"] / total * 100 if total > 0 else 0
-    )
+    conn = get_db()
+    c = conn.cursor()
+
+    # Soft fails = wifi_retry = 1
+    c.execute("SELECT COUNT(*) FROM items WHERE wifi_retry = 1")
+    soft_fails = c.fetchone()[0]
+
+    # Hard fails = done=1 AND wifi_retry=0 AND last_fail_reason IS NOT NULL
+    c.execute("""
+        SELECT COUNT(*) FROM items
+        WHERE done = 1 AND wifi_retry = 0 AND last_fail_reason IS NOT NULL
+    """)
+    hard_fails = c.fetchone()[0]
+
+    # Successful downloads = done=1 AND last_fail_reason IS NULL
+    c.execute("""
+        SELECT COUNT(*) FROM items
+        WHERE done = 1 AND last_fail_reason IS NULL
+    """)
+    downloaded = c.fetchone()[0]
+
+    conn.close()
+
+    total_attempted = downloaded + soft_fails + hard_fails
+    soft_rate = (soft_fails / total_attempted * 100) if total_attempted else 0
+    hard_rate = (hard_fails / total_attempted * 100) if total_attempted else 0
 
     ui_log(
-        "Downloaded: {d} | Failures: {f} | 403s: {f403} | "
-        "Metadata: {m} | Download: {dl} | Query: {q} | "
-        "Failure rate: {r:.2f}%".format(
-            d=stats["downloaded"],
-            f=stats["failures"],
-            f403=stats["forbidden_403"],
-            m=stats["metadata_fail"],
-            dl=stats["download_fail"],
-            q=stats["query_fail"],
-            r=failure_rate,
-        ),
+        f"Downloaded: {downloaded} | Soft fails: {soft_fails} | Hard fails: {hard_fails} "
+        f"| Soft rate: {soft_rate:.1f}% | Hard rate: {hard_rate:.1f}%",
+        callback,
+    )
+
+# ---------------------------------------------------------
+# DB Summary (Bottom Line)
+# ---------------------------------------------------------
+def print_db_summary(callback):
+    conn = get_db()
+    c = conn.cursor()
+
+    c.execute("SELECT COUNT(*) FROM items")
+    total = c.fetchone()[0]
+
+    c.execute("SELECT COUNT(*) FROM items WHERE done = 1")
+    done = c.fetchone()[0]
+
+    c.execute("SELECT COUNT(*) FROM items WHERE done = 0")
+    pending = c.fetchone()[0]
+
+    c.execute("SELECT COUNT(*) FROM items WHERE wifi_retry = 1")
+    soft_fails = c.fetchone()[0]
+
+    c.execute("""
+        SELECT COUNT(*) FROM items
+        WHERE done = 1 AND wifi_retry = 0 AND last_fail_reason IS NOT NULL
+    """)
+    hard_fails = c.fetchone()[0]
+
+    c.execute("SELECT SUM(wifi_fail_count) FROM items")
+    wifi_attempts = c.fetchone()[0] or 0
+
+    conn.close()
+
+    ui_log(
+        f"DB: total={total} | done={done} | pending={pending} | "
+        f"soft={soft_fails} | hard={hard_fails} | wifi_attempts={wifi_attempts}",
         callback,
     )
 
@@ -524,13 +550,28 @@ def run_crawler(progress_callback=None):
     ensure_dirs()
     ui_log("Crawler started…", progress_callback)
 
+    # Phase 1: Wi-Fi retry queue (once, at startup)
+    wifi_retry_phase = wifi_on()
+    if wifi_retry_phase:
+        ui_log("Stable Wi-Fi detected — processing Wi-Fi retry queue first.", progress_callback)
+    else:
+        ui_log("Wi-Fi not stable — skipping Wi-Fi retry queue.", progress_callback)
+
+    item_counter = 0  # for printing DB summary every 20 items
+
     while not STOP_REQUESTED:
         if not safety_gate(progress_callback):
             if STOP_REQUESTED:
                 break
             continue
 
-        item = get_next_item()
+        item = get_next_item(wifi_retry_phase)
+
+        # If Wi-Fi retry phase is active but queue is empty, switch to normal mode
+        if wifi_retry_phase and not item:
+            wifi_retry_phase = False
+            continue
+
         if not item:
             ui_log("No more items. Sleeping 60s…", progress_callback)
             if not sleep_interruptible(60):
@@ -544,8 +585,14 @@ def run_crawler(progress_callback=None):
         if STOP_REQUESTED:
             break
         if not title:
-            mark_done(qid)
+            if wifi_retry_phase:
+                mark_wifi_failure(qid, "title")
+            else:
+                mark_done(qid)
             print_stats(progress_callback)
+            item_counter += 1
+            if item_counter % 20 == 0:
+                print_db_summary(progress_callback)
             sleep_interruptible(SLEEP_BETWEEN_ITEMS)
             continue
 
@@ -553,8 +600,14 @@ def run_crawler(progress_callback=None):
         if STOP_REQUESTED:
             break
         if not info:
-            mark_done(qid)
+            if wifi_retry_phase:
+                mark_wifi_failure(qid, "metadata")
+            else:
+                mark_done(qid)
             print_stats(progress_callback)
+            item_counter += 1
+            if item_counter % 20 == 0:
+                print_db_summary(progress_callback)
             sleep_interruptible(SLEEP_BETWEEN_ITEMS)
             continue
 
@@ -562,80 +615,30 @@ def run_crawler(progress_callback=None):
         if STOP_REQUESTED:
             break
         if path is None:
-            mark_done(qid)
+            if wifi_retry_phase:
+                mark_wifi_failure(qid, "download")
+            else:
+                mark_done(qid)
             print_stats(progress_callback)
+            item_counter += 1
+            if item_counter % 20 == 0:
+                print_db_summary(progress_callback)
             sleep_interruptible(SLEEP_BETWEEN_ITEMS)
             continue
 
         ui_log(f"Saved {path}", progress_callback)
         stats["downloaded"] += 1
-        mark_done(qid)
+        mark_success(qid)
 
         print_stats(progress_callback)
+        item_counter += 1
+        if item_counter % 20 == 0:
+            print_db_summary(progress_callback)
+
         sleep_interruptible(SLEEP_BETWEEN_ITEMS)
 
     ui_log("Crawler stopped.", progress_callback)
 
-def run_wifi_retry_pass():
-    print("Starting Wi‑Fi retry pass…")
-    run_wifi_retry(progress_callback=lambda msg: print(msg))
-    print("Wi‑Fi retry pass complete.")
-
-def run_wifi_retry(progress_callback=None):
-    # Only run this pass when on Wi‑Fi
-    if not on_wifi():
-        if progress_callback:
-            progress_callback("Not on Wi‑Fi — skipping retry pass")
-        return
-
-    if progress_callback:
-        progress_callback("Starting Wi‑Fi retry pass…")
-
-    while True:
-        item = get_next_wifi_retry_item()
-        if not item:
-            if progress_callback:
-                progress_callback("No Wi‑Fi retry items left")
-            break
-
-        qid, year = item
-
-        if progress_callback:
-            progress_callback(f"Retrying {qid} ({year})")
-
-        # Step 1: Try to get the image title
-        title = get_image_title_for_qid(qid, progress_callback)
-        if not title:
-            record_wifi_retry_fail(qid, "NO_TITLE")
-            continue
-
-        # Step 2: Try to get metadata
-        info = get_image_info(title, qid, progress_callback)
-        if not info:
-            record_wifi_retry_fail(qid, "NO_METADATA")
-            continue
-
-        # Step 3: Try to download the image
-        path = download_image(info["url"], qid, progress_callback)
-        if not path:
-            record_wifi_retry_fail(qid, "DOWNLOAD_FAIL")
-            continue
-
-        # Success!
-        if progress_callback:
-            progress_callback(f"Saved {path}")
-        mark_done(qid)
 
 if __name__ == "__main__":
-    if on_wifi():
-        print("Wi‑Fi detected.")
-        print("Run Wi‑Fi retry pass? (y/N): ", end="")
-        choice = input().strip().lower()
-        if choice == "y":
-            run_wifi_retry_pass()
-        else:
-            run_crawler()
-    else:
-        print("No Wi‑Fi detected. Running main crawler.")
-        run_crawler()
-
+    run_crawler()
