@@ -8,7 +8,7 @@ source.dir = .
 source.main = main.py
 
 version = 1.0.0
-requirements = python3,kivy
+requirements = python3,kivy,android,pyjnius,requests,urllib3,certifi,idna,charset-normalizer
 orientation = portrait
 fullscreen = 0
 
