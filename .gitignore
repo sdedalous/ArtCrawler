@@ -1,0 +1,17 @@
+# Kivy logs
+.kivy/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Buildozer build artifacts
+.buildozer/
+build/
+bin/
+
+# Logs
+*.log
+
+# Database
+*.db
