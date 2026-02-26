@@ -1,13 +1,36 @@
 import sqlite3
 from android.storage import app_storage_path
 import os
+import shutil
 
-# Private app storage: /data/data/<package>/files
+# ---------------------------------------------------------
+# PATHS
+# ---------------------------------------------------------
+
+# New private app storage: /data/data/<package>/files
 PRIVATE_DIR = app_storage_path()
 os.makedirs(PRIVATE_DIR, exist_ok=True)
 
 DB_PATH = os.path.join(PRIVATE_DIR, "art.db")
 
+# Old DB location (shared storage)
+OLD_DB_PATH = "/storage/emulated/0/Download/ArtCrawler/art.db"
+
+# ---------------------------------------------------------
+# AUTO-MIGRATE OLD DB → NEW PRIVATE LOCATION
+# ---------------------------------------------------------
+# Pydroid3 sandbox breaks the original migration logic.
+# This version ALWAYS copies the old DB if it exists.
+try:
+    if os.path.exists(OLD_DB_PATH):
+        shutil.copy2(OLD_DB_PATH, DB_PATH)
+except Exception as e:
+    print("DB migration error:", e)
+
+
+# ---------------------------------------------------------
+# DB ACCESS
+# ---------------------------------------------------------
 def get_db():
     return sqlite3.connect(DB_PATH)
 
