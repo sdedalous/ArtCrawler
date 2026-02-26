@@ -1,136 +1,143 @@
-<RootManager>:
-    HomeScreen:
-    LogScreen:
-<HomeScreen>:
-    name: "home"
+import sqlite3
+from android.storage import app_storage_path
+import os
+import shutil
 
-    BoxLayout:
-        orientation: "vertical"
-        padding: dp(10)
-        spacing: dp(10)
+# ---------------------------------------------------------
+# PATHS
+# ---------------------------------------------------------
 
-        # -------------------------
-        # EXPANDING STATUS PANEL (FIXED)
-        # -------------------------
-        ScrollView:
-            do_scroll_y: True
-            do_scroll_x: False
-            size_hint_y: None
-            height: dp(180)
+# New private app storage: /data/data/<package>/files
+PRIVATE_DIR = app_storage_path()
+os.makedirs(PRIVATE_DIR, exist_ok=True)
 
-            BoxLayout:
-                orientation: "vertical"
-                size_hint_y: None
-                height: self.minimum_height
-                spacing: dp(6)
+DB_PATH = os.path.join(PRIVATE_DIR, "art.db")
 
-                Label:
-                    id: crawler_status
-                    text: root.crawler_status_text
-                    font_size: dp(14)
-                    halign: "left"
-                    valign: "top"
-                    text_size: self.width, None
-                    size_hint_y: None
-                    height: self.texture_size[1]
+# Old DB location (shared storage)
+OLD_DB_PATH = "/storage/emulated/0/Download/ArtCrawler/art.db"
 
-                Label:
-                    id: indexer_status
-                    text: root.indexer_status_text
-                    font_size: dp(14)
-                    halign: "left"
-                    valign: "top"
-                    text_size: self.width, None
-                    size_hint_y: None
-                    height: self.texture_size[1]
-
-                Label:
-                    id: db_status
-                    text: root.db_stats_text
-                    font_size: dp(14)
-                    halign: "left"
-                    valign: "top"
-                    text_size: self.width, None
-                    size_hint_y: None
-                    height: self.texture_size[1]
-
-        # -------------------------
-        # Buttons area
-        # -------------------------
-        ScrollView:
-            do_scroll_y: True
-            do_scroll_x: False
-
-            BoxLayout:
-                orientation: "vertical"
-                size_hint_y: None
-                height: self.minimum_height
-                spacing: dp(10)
-
-                Button:
-                    text: "Start Crawler"
-                    font_size: dp(18)
-                    size_hint_y: None
-                    height: dp(48)
-                    on_release: root.start_crawler()
-
-                Button:
-                    text: "Stop Crawler"
-                    font_size: dp(18)
-                    size_hint_y: None
-                    height: dp(48)
-                    on_release: root.stop_crawler()
-
-                Button:
-                    text: "Start Indexer"
-                    font_size: dp(18)
-                    size_hint_y: None
-                    height: dp(48)
-                    on_release: root.start_indexer()
-
-                Button:
-                    text: "Stop Indexer"
-                    font_size: dp(18)
-                    size_hint_y: None
-                    height: dp(48)
-                    on_release: root.stop_indexer()
-
-                Button:
-                    text: "View Logs"
-                    font_size: dp(18)
-                    size_hint_y: None
-                    height: dp(48)
-                    on_release: app.root.current = "logs"
+# ---------------------------------------------------------
+# AUTO-MIGRATE OLD DB → NEW PRIVATE LOCATION
+# ---------------------------------------------------------
+# If the new DB does not exist but the old one does, copy it.
+try:
+    if not os.path.exists(DB_PATH) and os.path.exists(OLD_DB_PATH):
+        shutil.copy2(OLD_DB_PATH, DB_PATH)
+except Exception as e:
+    print("DB migration error:", e)
 
 
-<LogScreen>:
-    name: "logs"
+# ---------------------------------------------------------
+# DB ACCESS
+# ---------------------------------------------------------
+def get_db():
+    return sqlite3.connect(DB_PATH)
 
-    BoxLayout:
-        orientation: "vertical"
-        padding: dp(10)
-        spacing: dp(10)
 
-        Label:
-            text: "Live Logs"
-            font_size: dp(20)
-            size_hint_y: None
-            height: dp(40)
+# ---------------------------------------------------------
+# MAIN INITIALIZATION
+# ---------------------------------------------------------
+def init_db():
+    conn = get_db()
+    c = conn.cursor()
 
-        ScrollView:
-            do_scroll_y: True
-            do_scroll_x: False
+    # Main items table
+    c.execute("""
+        CREATE TABLE IF NOT EXISTS items (
+            qid TEXT PRIMARY KEY,
+            year INTEGER,
+            century INTEGER,
+            bucket TEXT,
+            priority INTEGER,
+            done INTEGER DEFAULT 0
+        )
+    """)
 
-            Label:
-                id: log_text
-                text: root.log_text
-                font_size: dp(14)
-                text_size: self.width, None
-                size_hint_y: None
-                height: self.texture_size[1]
+    # Old indexer state (kept for compatibility)
+    c.execute("""
+        CREATE TABLE IF NOT EXISTS indexer_state (
+            id INTEGER PRIMARY KEY CHECK (id = 1),
+            offset INTEGER DEFAULT 0
+        )
+    """)
+    c.execute("INSERT OR IGNORE INTO indexer_state (id, offset) VALUES (1, 0)")
 
-        Button:
-            text: "Back"
-            size_hint_y: None
-            height: dp(48)
-            on_release: app.root.current = "home"
+    # NEW: Per-class offsets for rotating indexer
+    c.execute("""
+        CREATE TABLE IF NOT EXISTS class_offsets (
+            class_name TEXT PRIMARY KEY,
+            offset INTEGER NOT NULL
+        )
+    """)
+
+    conn.commit()
+    conn.close()
+
+
+# ---------------------------------------------------------
+# OLD OFFSET (kept for compatibility)
+# ---------------------------------------------------------
+def get_indexer_offset():
+    conn = get_db()
+    c = conn.cursor()
+    c.execute("SELECT offset FROM indexer_state WHERE id = 1")
+    row = c.fetchone()
+    conn.close()
+    return row[0] if row else 0
+
+
+def set_indexer_offset(offset):
+    conn = get_db()
+    c = conn.cursor()
+    c.execute("UPDATE indexer_state SET offset = ? WHERE id = 1", (offset,))
+    conn.commit()
+    conn.close()
+
+
+# ---------------------------------------------------------
+# NEW: PER-CLASS OFFSET SYSTEM
+# ---------------------------------------------------------
+def get_class_offset(class_name):
+    conn = get_db()
+    c = conn.cursor()
+    c.execute("SELECT offset FROM class_offsets WHERE class_name = ?", (class_name,))
+    row = c.fetchone()
+    conn.close()
+    if row is None:
+        return 0
+    return row[0]
+
+
+def set_class_offset(class_name, offset):
+    conn = get_db()
+    c = conn.cursor()
+    c.execute("""
+        INSERT INTO class_offsets (class_name, offset)
+        VALUES (?, ?)
+        ON CONFLICT(class_name) DO UPDATE SET offset=excluded.offset
+    """, (class_name, offset))
+    conn.commit()
+    conn.close()
+
+
+# ---------------------------------------------------------
+# YEAR CLASSIFICATION (unchanged)
+# ---------------------------------------------------------
+def classify_year(year):
+    if year is None:
+        return ("unknown", 99)
+
+    if year >= 1950:
+        return ("contemporary", 1)
+    if 1900 <= year <= 1949:
+        return ("modern", 2)
+    if 1800 <= year <= 1899:
+        return ("romantic", 3)
+    if 1600 <= year <= 1799:
+        return ("classical", 4)
+    if 1400 <= year <= 1599:
+        return ("renaissance", 5)
+    if year < 1400:
+        return ("medieval", 6)
+
+    return ("unknown", 99)

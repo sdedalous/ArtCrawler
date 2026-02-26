@@ -8,7 +8,12 @@ import crawler
 import indexer
 from db import get_db, get_indexer_offset
 
-LOG_PATH = "/storage/emulated/0/Download/ArtCrawler/failed_download.log"
+from android.storage import app_storage_path
+import os
+
+# Logs now stored in private app storage (Android 16 safe)
+PRIVATE_DIR = app_storage_path()
+LOG_PATH = os.path.join(PRIVATE_DIR, "failed_download.log")
 
 
 class HomeScreen(Screen):
@@ -255,4 +260,3 @@ class ArtCrawlerApp(App):
 
 if __name__ == "__main__":
     ArtCrawlerApp().run()
-ỳlp

@@ -2,7 +2,6 @@ import os
 import time
 import socket
 import shutil
-import subprocess
 import requests
 from urllib.parse import quote
 import requests.packages.urllib3.util.connection as urllib3_cn
@@ -22,16 +21,21 @@ def allowed_gai_family():
 urllib3_cn.allowed_gai_family = allowed_gai_family
 
 # ---------------------------------------------------------
-# Paths and constants
+# Paths and constants (UPDATED FOR ANDROID 16)
 # ---------------------------------------------------------
-BASE_DIR = "/storage/emulated/0/Download/ArtCrawler"
-IMAGES_DIR = "/storage/emulated/0/Pictures/ArtCrawler"
+from android.storage import primary_external_storage_path
 
-LOG_403 = f"{BASE_DIR}/failed_403.log"
-LOG_METADATA = f"{BASE_DIR}/failed_metadata.log"
-LOG_DOWNLOAD = f"{BASE_DIR}/failed_download.log"
-LOG_QUERY = f"{BASE_DIR}/failed_query.log"
-LOG_WIFI_HARD = f"{BASE_DIR}/failed_wifi_hard.log"
+# Shared storage root: /storage/emulated/0
+BASE_DIR = primary_external_storage_path()
+
+# Public image folder (visible in Gallery)
+IMAGES_DIR = os.path.join(BASE_DIR, "Pictures", "ArtCrawler")
+os.makedirs(IMAGES_DIR, exist_ok=True)
+
+LOG_403 = os.path.join(BASE_DIR, "failed_403.log")
+LOG_METADATA = os.path.join(BASE_DIR, "failed_metadata.log")
+LOG_DOWNLOAD = os.path.join(BASE_DIR, "failed_download.log")
+LOG_QUERY = os.path.join(BASE_DIR, "failed_query.log")
 
 SLEEP_BETWEEN_ITEMS = 2
 
@@ -177,20 +181,7 @@ def safety_gate(callback):
     return True
 
 # ---------------------------------------------------------
-# Wi-Fi detection (Termux)
-# ---------------------------------------------------------
-def wifi_on():
-    try:
-        out = subprocess.check_output(
-            ["termux-wifi-connectioninfo"],
-            stderr=subprocess.DEVNULL
-        ).decode("utf-8")
-        return '"state":"CONNECTED"' in out
-    except Exception:
-        return False
-
-# ---------------------------------------------------------
-# Network helper (unchanged retries, no per-request Wi-Fi logic)
+# Network helper
 # ---------------------------------------------------------
 def safe_request(url, params, headers, callback, retries=5):
     delay = 2
@@ -211,27 +202,12 @@ def safe_request(url, params, headers, callback, retries=5):
 # ---------------------------------------------------------
 # DB helpers
 # ---------------------------------------------------------
-def get_next_item(wifi_retry_phase):
+def get_next_item():
     conn = get_db()
     c = conn.cursor()
-
-    if wifi_retry_phase:
-        # Process Wi-Fi retry queue first (items that previously failed on bad network)
-        c.execute(
-            "SELECT qid, year FROM items "
-            "WHERE wifi_retry = 1 AND wifi_fail_count < 3 "
-            "LIMIT 1"
-        )
-        row = c.fetchone()
-        if row:
-            conn.close()
-            return row
-
-    # Normal queue: items never processed or newly indexed
     c.execute(
         "SELECT qid, year FROM items "
-        "WHERE done = 0 "
-        "LIMIT 1"
+        "WHERE done = 0 LIMIT 1"
     )
     row = c.fetchone()
     conn.close()
@@ -241,59 +217,6 @@ def mark_done(qid):
     conn = get_db()
     c = conn.cursor()
     c.execute("UPDATE items SET done = 1 WHERE qid = ?", (qid,))
-    conn.commit()
-    conn.close()
-
-def mark_success(qid):
-    conn = get_db()
-    c = conn.cursor()
-    c.execute("""
-        UPDATE items
-        SET done = 1,
-            wifi_retry = 0,
-            last_fail_reason = NULL
-        WHERE qid = ?
-    """, (qid,))
-    conn.commit()
-    conn.close()
-
-def mark_wifi_failure(qid, reason):
-    conn = get_db()
-    c = conn.cursor()
-
-    c.execute("SELECT wifi_fail_count FROM items WHERE qid = ?", (qid,))
-    row = c.fetchone()
-    current = row[0] if row else 0
-
-    if current < 2:
-        # Soft fail: keep for Wi-Fi retry
-        c.execute("""
-            UPDATE items
-            SET wifi_fail_count = wifi_fail_count + 1,
-                wifi_retry = 1,
-                last_fail_reason = ?,
-                last_try = strftime('%s','now'),
-                done = 0
-            WHERE qid = ?
-        """, (reason, qid))
-    else:
-        # Hard fail after 3 attempts
-        c.execute("""
-            UPDATE items
-            SET wifi_fail_count = wifi_fail_count + 1,
-                wifi_retry = 0,
-                last_fail_reason = ?,
-                last_try = strftime('%s','now'),
-                done = 1
-            WHERE qid = ?
-        """, (reason, qid))
-
-        try:
-            with open(LOG_WIFI_HARD, "a") as f:
-                f.write(f"{qid} | WIFI HARD FAIL | {reason}\n")
-        except Exception:
-            pass
-
     conn.commit()
     conn.close()
 
@@ -474,18 +397,15 @@ def print_stats(callback):
     conn = get_db()
     c = conn.cursor()
 
-    # Soft fails = wifi_retry = 1
     c.execute("SELECT COUNT(*) FROM items WHERE wifi_retry = 1")
     soft_fails = c.fetchone()[0]
 
-    # Hard fails = done=1 AND wifi_retry=0 AND last_fail_reason IS NOT NULL
     c.execute("""
         SELECT COUNT(*) FROM items
         WHERE done = 1 AND wifi_retry = 0 AND last_fail_reason IS NOT NULL
     """)
     hard_fails = c.fetchone()[0]
 
-    # Successful downloads = done=1 AND last_fail_reason IS NULL
     c.execute("""
         SELECT COUNT(*) FROM items
         WHERE done = 1 AND last_fail_reason IS NULL
@@ -550,14 +470,7 @@ def run_crawler(progress_callback=None):
     ensure_dirs()
     ui_log("Crawler started…", progress_callback)
 
-    # Phase 1: Wi-Fi retry queue (once, at startup)
-    wifi_retry_phase = wifi_on()
-    if wifi_retry_phase:
-        ui_log("Stable Wi-Fi detected — processing Wi-Fi retry queue first.", progress_callback)
-    else:
-        ui_log("Wi-Fi not stable — skipping Wi-Fi retry queue.", progress_callback)
-
-    item_counter = 0  # for printing DB summary every 20 items
+    item_counter = 0
 
     while not STOP_REQUESTED:
         if not safety_gate(progress_callback):
@@ -565,13 +478,7 @@ def run_crawler(progress_callback=None):
                 break
             continue
 
-        item = get_next_item(wifi_retry_phase)
-
-        # If Wi-Fi retry phase is active but queue is empty, switch to normal mode
-        if wifi_retry_phase and not item:
-            wifi_retry_phase = False
-            continue
-
+        item = get_next_item()
         if not item:
             ui_log("No more items. Sleeping 60s…", progress_callback)
             if not sleep_interruptible(60):
@@ -585,10 +492,7 @@ def run_crawler(progress_callback=None):
         if STOP_REQUESTED:
             break
         if not title:
-            if wifi_retry_phase:
-                mark_wifi_failure(qid, "title")
-            else:
-                mark_done(qid)
+            mark_done(qid)
             print_stats(progress_callback)
             item_counter += 1
             if item_counter % 20 == 0:
@@ -600,10 +504,7 @@ def run_crawler(progress_callback=None):
         if STOP_REQUESTED:
             break
         if not info:
-            if wifi_retry_phase:
-                mark_wifi_failure(qid, "metadata")
-            else:
-                mark_done(qid)
+            mark_done(qid)
             print_stats(progress_callback)
             item_counter += 1
             if item_counter % 20 == 0:
@@ -615,10 +516,7 @@ def run_crawler(progress_callback=None):
         if STOP_REQUESTED:
             break
         if path is None:
-            if wifi_retry_phase:
-                mark_wifi_failure(qid, "download")
-            else:
-                mark_done(qid)
+            mark_done(qid)
             print_stats(progress_callback)
             item_counter += 1
             if item_counter % 20 == 0:
@@ -628,7 +526,7 @@ def run_crawler(progress_callback=None):
 
         ui_log(f"Saved {path}", progress_callback)
         stats["downloaded"] += 1
-        mark_success(qid)
+        mark_done(qid)
 
         print_stats(progress_callback)
         item_counter += 1
@@ -638,7 +536,6 @@ def run_crawler(progress_callback=None):
         sleep_interruptible(SLEEP_BETWEEN_ITEMS)
 
     ui_log("Crawler stopped.", progress_callback)
-
 
 if __name__ == "__main__":
     run_crawler()

@@ -1,6 +1,12 @@
 import sqlite3
+from android.storage import app_storage_path
+import os
 
-DB_PATH = "/storage/emulated/0/Download/ArtCrawler/art.db"
+# Private app storage: /data/data/<package>/files
+PRIVATE_DIR = app_storage_path()
+os.makedirs(PRIVATE_DIR, exist_ok=True)
+
+DB_PATH = os.path.join(PRIVATE_DIR, "art.db")
 
 def get_db():
     return sqlite3.connect(DB_PATH)
@@ -93,7 +99,7 @@ def set_class_offset(class_name, offset):
 
 
 # ---------------------------------------------------------
-# YEAR CLASSIFICATION (kept exactly as you wrote it)
+# YEAR CLASSIFICATION (unchanged)
 # ---------------------------------------------------------
 def classify_year(year):
     if year is None:

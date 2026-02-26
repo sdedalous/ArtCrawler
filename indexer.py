@@ -1,4 +1,5 @@
 import time
+import socket
 import requests
 
 from db import (
@@ -16,7 +17,6 @@ SPARQL_URL = "https://query.wikidata.org/sparql"
 YEAR_MIN = 1880
 YEAR_MAX = 2024
 
-# Smaller batches = lighter queries = fewer timeouts
 BATCH_LIMIT = 60
 SLEEP_BETWEEN_BATCHES = 5
 
@@ -29,9 +29,15 @@ CLASSES = [
     ("portrait", "wd:Q134307"),
 ]
 
+# ---------------------------------------------------------
+# Force IPv4 (Android DNS stability)
+# ---------------------------------------------------------
+import requests.packages.urllib3.util.connection as urllib3_cn
 
+def allowed_gai_family():
+    return socket.AF_INET
 
-
+urllib3_cn.allowed_gai_family = allowed_gai_family
 
 
 def ui_log(msg, callback):
@@ -45,17 +51,13 @@ def build_query(class_qid, offset):
     return f"""
     SELECT ?item ?itemLabel ?image ?year WHERE {{
 
-      # Portraits (genre = portrait)
       ?item wdt:P136 wd:Q134307 .
 
-      # Any valid image property
       ?item (wdt:P18|wdt:P4765|wdt:P6802|wdt:P7482) ?image .
 
-      # Must have a creation date (your DB requires this)
       ?item wdt:P571 ?date .
       BIND(YEAR(?date) AS ?year)
 
-      # Year range filter
       FILTER(?year >= {YEAR_MIN} && ?year <= {YEAR_MAX})
 
       SERVICE wikibase:label {{ bd:serviceParam wikibase:language "en". }}
@@ -65,34 +67,50 @@ def build_query(class_qid, offset):
     """
 
 
-
+# ---------------------------------------------------------
+# SPARQL fetch with retry (Android network can be flaky)
+# ---------------------------------------------------------
 def fetch_items(class_qid, offset):
     query = build_query(class_qid, offset)
-    response = requests.get(
-        SPARQL_URL,
-        params={"query": query},
-        headers=HEADERS,
-        timeout=180  # was 60
-    )
 
-    if response.status_code != 200:
-        raise Exception(f"SPARQL query failed ({response.status_code})")
+    retries = 5
+    delay = 3
 
-    data = response.json()
-    results = []
-
-    for row in data["results"]["bindings"]:
-        qid = row["item"]["value"].split("/")[-1]
-        year_val = row.get("year", {}).get("value")
-        if not year_val:
-            continue
+    for attempt in range(retries):
         try:
-            year = int(year_val)
-        except ValueError:
-            continue
-        results.append((qid, year))
+            response = requests.get(
+                SPARQL_URL,
+                params={"query": query},
+                headers=HEADERS,
+                timeout=180
+            )
 
-    return results
+            if response.status_code != 200:
+                raise Exception(f"SPARQL query failed ({response.status_code})")
+
+            data = response.json()
+            results = []
+
+            for row in data["results"]["bindings"]:
+                qid = row["item"]["value"].split("/")[-1]
+                year_val = row.get("year", {}).get("value")
+                if not year_val:
+                    continue
+                try:
+                    year = int(year_val)
+                except ValueError:
+                    continue
+                results.append((qid, year))
+
+            return results
+
+        except Exception as e:
+            if attempt == retries - 1:
+                raise
+            time.sleep(delay)
+            delay *= 2  # exponential backoff
+
+    return []
 
 
 def insert_item(qid, year):
@@ -141,7 +159,6 @@ def run_indexer(progress_callback=None):
                 consecutive_failures = 0
             except Exception as e:
                 consecutive_failures += 1
-                # cap backoff at 5 minutes, but start gentler
                 wait_time = min(30 * consecutive_failures, 300)
                 ui_log(f"[ERROR] Fetch error for {class_name} at offset {offset}: {e}", progress_callback)
                 ui_log(f"[INFO] Sleeping {wait_time}s before retry…", progress_callback)
